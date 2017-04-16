@@ -1,0 +1,29 @@
+{
+  "name": "mean",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "ejs": "*",
+    "express": "*",
+    "express-session": "*",
+    "passport": "*",
+    "passport-jwt": "*",
+    "http-server": "*",
+    "mongojs": "*",
+    "mongoose": "*",
+    "babel-core": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-es2016": "*",
+    "babili": "*",
+    "bcryptjs": "*",
+    "jsonwebtoken": "*"
+  }
+}
