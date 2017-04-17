@@ -22,6 +22,6 @@ module.exports = {
 	Schema: VoteSchema,
 	Model: Vote,
 	findById: (id, callback) => Vote.findById(id, callback),
-	all: (callback) => Vote.find({}, callback)
-
+	all: (callback) => Vote.find({}, callback),
+	save: (vote, callback) => vote.save(callback)
 };

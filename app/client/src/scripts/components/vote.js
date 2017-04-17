@@ -1,5 +1,45 @@
 angular
 .module('App')
+.component('voteCreation', {
+
+	template: `
+		<div class="vote-creation form">
+			<input class="vote-creation-title" type="text" ng-model="$ctrl.title" placeholder="title" />
+			<input class="vote-creation-option" type="text" ng-model="$ctrl.option" placeholder="option" />
+			<button class="vote-creation-add-option" ng-click="$ctrl.addOption()">Add Option</button>
+			<div class="vote-creation-options" ng-repeat="option in $ctrl.options">{{option}}</div>
+			<button class="vote-creation-submit form-submit" ng-if="$ctrl.options.length > 1 && $ctrl.title" ng-click="$ctrl.addVote()">Create</button>
+		</div>
+	`.replace(/\t|\n/g,''),
+
+	controller: ['$http', function($http){
+		this.title = '';
+		this.option = '';
+		this.options = [];
+
+		this.addOption = () => {
+			this.options.push(this.option);
+			this.option = '';
+			this.controller.test();
+		};
+
+		this.addVote = () => {
+			$http
+			.post('/vote/create', {
+				title: this.title,
+				options: this.options
+			})
+			.success((data) => {
+				this.controller.test();
+			});
+		};
+
+	}]
+
+});
+
+angular
+.module('App')
 .component('voteList', {
 
 	template: `
@@ -10,6 +50,7 @@ angular
 				<button class="vote-option" ng-if="!option.selected" ng-click="$ctrl.vote(vote, option)">{{option.title}}</div>
 			</div>
 		</div>
+		<vote-creation></vote-creation>
 	`.replace(/\t|\n/g,''),
 
 	controller: ['$http', '$cookies', function($http, $cookies){

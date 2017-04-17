@@ -21,4 +21,24 @@ router.post('/choose', (req, res, next) => {
 
 });
 
+router.post('/create', (req, res, next) => {
+	if(!req.body || !req.body.options || !req.body.title) res.json({success: false, msg: 'Invalid data'});
+
+	const options = [];
+
+	for(let title of req.body.options)
+		options.push({title, voters: []});
+
+	const vote = new Vote.Model({
+		title: req.body.title,
+		options: options
+	});
+
+	vote.save((err, doc) => {
+		if(err) res.json({success: false, msg: err});
+		else res.json(doc);
+	});
+
+});
+
 module.exports = router;
