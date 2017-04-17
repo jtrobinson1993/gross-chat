@@ -1,1 +1,1 @@
-"use strict";
+'use strict';angular.module('App',['ngCookies']);

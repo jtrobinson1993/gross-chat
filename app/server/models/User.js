@@ -26,5 +26,5 @@ module.exports = {
 						user.save(callback);
 					}));
 				},
-	authenticate: (password, hash, callback) => bcrypt.compare(password, hash, callback)
+	authenticate: (user, password, callback) => bcrypt.compare(password, user.password, callback)
 };
