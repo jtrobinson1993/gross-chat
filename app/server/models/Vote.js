@@ -21,7 +21,7 @@ const Vote = mongoose.model('Vote', VoteSchema);
 module.exports = {
 	Schema: VoteSchema,
 	Model: Vote,
-	findById: Vote.findById,
-
+	findById: (id, callback) => Vote.findById(id, callback),
+	all: (callback) => Vote.find({}, callback)
 
 };

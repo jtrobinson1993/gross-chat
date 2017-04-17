@@ -9,7 +9,11 @@ const UserSchema = mongoose.Schema({
 	password: {
 		type: String,
 		required: true
-	}
+	},
+	votes: [{
+			vote: mongoose.Schema.Types.ObjectId,
+			option: mongoose.Schema.Types.ObjectId
+	}]
 });
 
 const User = mongoose.model('User', UserSchema);
