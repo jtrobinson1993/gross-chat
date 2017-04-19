@@ -17,7 +17,7 @@ router.get('/list', (req, res, next) => {
 	});
 });
 
-router.post('/choose', (req, res, next) => {
+router.post('/select', (req, res, next) => {
 
 });
 
