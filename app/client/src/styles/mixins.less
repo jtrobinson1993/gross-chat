@@ -1,0 +1,63 @@
+// main: styles.less
+
+// DESIGN
+#full-width-mobile(){
+	display: block;
+	width: 100%;
+
+	@media @tablet-portrait {
+		display: inline-block;
+		width: auto;
+		vertical-align: middle;
+	}
+}
+
+#glow(@color: @color-white){
+	box-shadow: 0 0 8px fade(@color, 60%);
+}
+
+#material-element(@background: @color-white){
+	background-color: @background;
+	border-radius: 4px;
+	border-bottom: 2px solid (@background - @color-shade);
+	box-shadow: @shadow-small;
+}
+
+// COMPONENTS
+#button(@background: @color-blue-light, @color: @color-beige-light){
+	#material-element(@background);
+	#full-width-mobile();
+
+	padding: 10px 20px;
+	color: @color;
+	text-align: center;
+	text-shadow: @shadow-tiny;
+	font-size: 100%;
+
+	cursor: pointer;
+
+	transition: background-color @transition-speed, border-bottom-color @transition-speed;
+
+	&:hover {
+		background-color: @background + @color-shade;
+		border-bottom-color: @background;
+	}
+
+}
+
+#input(){
+	#full-width-mobile();
+
+	padding: 10px;
+	background-color: @color-white;
+	border: 1px solid @color-grey;
+	border-radius: 2px;
+	box-shadow: none;
+	transition: box-shadow @transition-speed;
+	font-family: @font-main;
+	font-size: 100%;
+
+	&:focus {
+		#glow(@color-blue-light);
+	}
+}

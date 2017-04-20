@@ -1,15 +1,20 @@
 <html>
 	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto|Kaushan+Script" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="styles/styles.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-cookies.min.js"></script>
 		<script src="scripts/app.js"></script>
+		<script src="scripts/services/$user.js"></script>
 		<script src="scripts/components/user.js"></script>
 		<script src="scripts/components/vote.js"></script>
 	</head>
-	<body ng-app="App">
-		<user-login></user-login>
-		<user-register></user-register>
-		<vote-ui></vote-ui>
+	<body>
+		<header><div class="title">Voter</div></header>
+		<div class="content" ng-app="App">
+			<user-ui></user-ui>
+			<vote-ui></vote-ui>
+		</div>
 	</body>
 </html>

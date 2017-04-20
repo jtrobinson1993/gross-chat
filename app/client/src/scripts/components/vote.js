@@ -1,28 +1,24 @@
 // VOTE UI COMPONENT
-angular
-.module('App')
-.component('voteUi', {
+app.component('voteUi', {
 
 	template: `
 		<vote-form></vote-form>
 		<vote-list votes="$ctrl.votes"></vote-list>
 	`.replace(/\t|\n/g,''),
 
-	controller: ['$http', '$scope', '$cookies', function($http, $scope, $cookies){
+	controller: ['$http', '$scope', '$user', function($http, $scope, $user){
 		this.votes = [];
 
 		this.$onInit = () => {
 			$http
 			.get('/vote/list')
 			.success((data) => {
-				const userId = $cookies.getObject('user').id;
-				for(let vote of data){
-					for(let option of vote.options){
-						if(option.voters.indexOf(userId) >= 0) {
-							option.selected = true;
-							break;
-						}
-					}
+				const user = $user.current();
+				if(user){
+					data.forEach(vote => {
+						const selectedOption = vote.options.find(option => option.voters.indexOf(user.id) >= 0);
+						if(selectedOption) selectedOption.selected = true;
+					});
 				}
 				this.votes = data;
 			});
@@ -45,18 +41,20 @@ angular
 });
 
 // VOTE FORM COMPONENT
-angular
-.module('App')
-.component('voteForm', {
+app.component('voteForm', {
 
 	template: `
-		<div class="vote-form form">
-			<input class="form-input" type="text" placeholder="title" ng:model="$ctrl.title"/>
-			<input class="form-input" type="text" placeholder="option" ng:model="$ctrl.option"/>
+		<h2 class="component-title">Create new vote</h2>
+		<form class="vote-form form" name="voteForm">
+			<div class="messages" ng:messages="voteForm.title.$error">
+
+			</div>
+			<input class="form-input" type="text" placeholder="title" name="title" ng:model="$ctrl.title" required/>
+			<input class="form-input" type="text" placeholder="option" name="option" ng:model="$ctrl.option"/>
 			<div class="form-button button" ng:click="$ctrl.addOption()">Add Option</div>
 			<vote-form-option ng:repeat="option in $ctrl.options track by $index" on-remove="$ctrl.removeOption(option)" option="option"></vote-form-option>
-			<div class="form-button button important" ng:click="$ctrl.addVote()" ng:show="$ctrl.title && $ctrl.options.length > 1">Create Vote</div>
-		</div>
+			<div class="form-button button important submit" ng:click="$ctrl.addVote()" ng:show="$ctrl.title && $ctrl.options.length > 1">Create Vote</div>
+		</form>
 	`.replace(/\t|\n/g,''),
 
 	controller: ['$http', '$scope', function($http, $scope){
@@ -96,13 +94,11 @@ angular
 });
 
 // VOTE FORM OPTION COMPONENT
-angular
-.module('App')
-.component('voteFormOption', {
+app.component('voteFormOption', {
 
 	template: `
 		<div class="vote-form-option">{{$ctrl.option}}</div>
-		<div class="vote-form-option-remove" ng:click="$ctrl.onRemove({option:$ctrl.option})">X</div>
+		<div class="vote-form-option-remove fa fa-close" ng:click="$ctrl.onRemove({option:$ctrl.option})"></div>
 	`.replace(/\t|\n/g,''),
 
 	bindings: {
@@ -113,9 +109,7 @@ angular
 });
 
 // VOTE LIST COMPONENT
-angular
-.module('App')
-.component('voteList', {
+app.component('voteList', {
 
 	template: `
 		<div class="vote-list">
@@ -134,9 +128,7 @@ angular
 });
 
 // VOTE ITEM COMPONENT
-angular
-.module('App')
-.component('voteItem', {
+app.component('voteItem', {
 
 	template: `
 		<div class="vote-item">
@@ -156,9 +148,7 @@ angular
 });
 
 // VOTE OPTION COMPONENT
-angular
-.module('App')
-.component('voteOption', {
+app.component('voteOption', {
 
 	template: `
 		<div class="vote-option" ng:class="$ctrl.isSelected ? 'selected': ''" ng:click="$ctrl.onClick()" data-id="$ctrl.option._id">
@@ -171,13 +161,13 @@ angular
 		option: '<'
 	},
 
-	controller: ['$scope', '$cookies', function($scope, $cookies){
+	controller: ['$scope', '$user', function($scope, $user){
 		this.isSelected = false;
 
 		this.onClick = () => {
 			if(!this.isSelected){
 				this.isSelected = true;
-				this.option.voters.push($cookies.getObject('user'));
+				this.option.voters.push($user.current());
 				$scope.$emit('vote:option-clicked', this.option);
 			}
 		};

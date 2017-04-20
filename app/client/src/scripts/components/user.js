@@ -1,73 +1,85 @@
-angular
-.module('App')
-.component('userLogin', {
+// USER UI COMPONENT
+app.component('userUi', {
 
 	template: `
-		<div class="user-login form">
-			<input class="user-login-name form-field" type="text" ng:model="$ctrl.name" placeholder="username"/>
-			<input class="user-login-password form-field" type="password" ng:model="$ctrl.password" placeholder="password"/>
-			<button class="user-login-submit form-submit" ng:click="$ctrl.login()" >Log in</button>
-		</div>
+		<div class="user-info" ng:show="$ctrl.isLoggedIn()">{{$ctrl.currentUser.name}}</div>
+		<user-login ng:show="!$ctrl.isLoggedIn()"></user-login>
+		<user-register ng:show="!$ctrl.isLoggedIn()"></user-register>
 	`.replace(/\t|\n/g,''),
 
-	controller: ['$http', '$cookies', '$location', function($http, $cookies, $location) {
-		this.name = '';
-		this.password = '';
+	controller: ['$scope', '$user', function($scope, $user){
+
+		this.currentUser = $user.current();
+
+		this.isLoggedIn = () => $user.current() !== undefined;
+
+		$scope.$on('user:logged-in', (event, user) => {
+			this.currentUser = user;
+		});
+
+	}]
+
+});
+
+// USER LOGIN COMPONENT
+app.component('userLogin', {
+
+	template: `
+		<h2 class="component-title">Log in</h2>
+		<form class="user-login form" name="userLogin">
+			<input class="form-input" type="text" placeholder="username" name="name" ng:model="$ctrl.name" required />
+			<input class="form-input" type="password" placeholder="password" name="password" ng:model="$ctrl.password" required />
+			<div class="form-button button important submit" ng:click="$ctrl.login()">Log in</div>
+		</form>
+	`.replace(/\t|\n/g,''),
+
+	controller: ['$scope', '$user', function($scope, $user){
 
 		this.login = () => {
-			if(this.name && this.password)
-				$http
-				.post('/user/authenticate', {
-					name: this.name,
-					password: this.password
-				})
-				.success((data) => {
-					$cookies.putObject('token', data.token);
-					$cookies.putObject('user', data.user);
-				})
-				.error((err) => {
-					console.log(err);
-				});
+			if(!this.name || !this.password) return;
+			$user
+			.login(this.name, this.password)
+			.success((data) => {
+				$user.data(data);
+				$scope.$emit('user:logged-in', data.user);
+			})
+			.error((err) => {
+				console.log(err);
+			});
+			this.name = this.password = '';
 		};
 
 	}]
 
 });
 
-angular
-.module('App')
-.component('userRegister', {
+// USER REGISTER COMPONENT
+app.component('userRegister', {
 
 	template: `
-		<div class="user-register form">
-			<input class="user-register-name form-field" type="text" ng:model="$ctrl.name" placeholder="username"/>
-			<input class="user-register-password form-field" type="password" ng:model="$ctrl.password" placeholder="password"/>
-			<input class="user-register-password-confirm form-field" type="password" ng:model="$ctrl.passwordConfirmation" placeholder="confirm password"/>
-			<button class="user-register-submit form-submit" ng:click="$ctrl.register()" >Register</button>
-		</div>
+		<h2 class="component-title">Register</h2>
+		<form class="user-register form" name="userRegister">
+			<input class="form-input" type="text" placeholder="username" name="name" ng:model="$ctrl.name" required />
+			<input class="form-input" type="password" placeholder="password" name="password" ng:model="$ctrl.password" required />
+			<input class="form-input" type="password" placeholder="confirm password" name="confirmPassword" ng:model="$ctrl.confirmPassword" required />
+			<div class="form-button button important submit" ng:click="$ctrl.register()">Register</div>
+		</form>
 	`.replace(/\t|\n/g,''),
 
-	controller: ['$http', '$cookies', '$location', function($http, $cookies, $location){
-		this.name = '';
-		this.password = '';
-		this.passwordConfirmation = '';
+	controller: ['$scope', '$user', function($scope, $user){
 
 		this.register = () => {
-			if(this.name && this.password && this.password == this.passwordConfirmation)
-				$http
-				.post('/user/register', {
-					name: this.name,
-					password: this.password
-				})
-				.success((data) => {
-					if(data.user) {
-						$cookies.putObject('token', data.token);
-						$cookies.putObject('user', data.user);
-					} else console.log(data.msg);
-				})
-				.error((err) => {
-					console.log(err);
-				});
+			if(!this.name || !this.password || this.password != this.confirmPassword) return;
+			$user
+			.register(this.name, this.password)
+			.success((data) => {
+				$user.data(data);
+				$scope.$emit('user:logged-in', data.user);
+			})
+			.error((err) => {
+				console.log(err);
+			});
+			this.name = this.password = this.confirmPassword = '';
 		};
 
 	}]

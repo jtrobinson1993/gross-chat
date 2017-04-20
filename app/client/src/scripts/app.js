@@ -1,1 +1,1 @@
-angular.module('App', ['ngCookies']);
+const app = angular.module('App', ['ngCookies']);
