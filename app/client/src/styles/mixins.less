@@ -1,17 +1,6 @@
 // main: styles.less
 
 // DESIGN
-#full-width-mobile(){
-	display: block;
-	width: 100%;
-
-	@media @tablet-portrait {
-		display: inline-block;
-		width: auto;
-		vertical-align: middle;
-	}
-}
-
 #center(){
 	position: absolute;
 	left: 50%;
@@ -48,8 +37,6 @@
 	}
 }
 #button(@background: @color-blue-light; @color: @color-beige-light; @important: true){
-	#full-width-mobile();
-
 	padding: 10px 20px;
 	color: @color;
 	text-align: center;
@@ -66,8 +53,6 @@
 }
 
 #input(){
-	#full-width-mobile();
-
 	padding: 10px;
 	background-color: @color-white;
 	border: 1px solid @color-grey;
@@ -123,6 +108,8 @@
 
 		@media @tablet-portrait {
 			width: auto;
+			min-width: 30%;
+			min-height: 30%;
 		}
 
 	}
