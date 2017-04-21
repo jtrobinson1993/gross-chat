@@ -3,6 +3,8 @@
 @import "normalize";
 @import "variables";
 @import "mixins";
+@import "header";
+@import "components/user";
 
 * {
 	box-sizing: border-box;
@@ -23,21 +25,6 @@ body {
 	margin: 0;
 }
 
-header {
-	background-color: @color-blue-very-light;
-	border-bottom: 1px solid @color-blue;
-	box-shadow: @shadow-medium;
-	padding: 10px;
-
-	.title {
-		color: @color-white;
-		text-align: center;
-		text-shadow: 0 1px 2px fade(@color-black, 50%), 0 3px 4px fade(@color-blue-dark, 50%);
-		font-size: 3.5em;
-		font-family: @font-logo;
-	}
-}
-
 .content {
 	max-width: 1080px;
 	margin: 0 auto;
@@ -45,15 +32,26 @@ header {
 }
 
 .button {
-	#button();
+
+	&.unimportant {
+		#button(@color: @color-blue, @important: false);
+	}
 
 	&.important {
-		#button(@color-green);
+		#button(@background: @color-green);
 	}
 
 	&.warning {
-		#button(@color-red);
+		#button(@background: @color-red);
 	}
+
+	&.disabled {
+		#button(@background: @color-grey);
+	}
+}
+
+.popup {
+	#popup();
 }
 
 .form-input {

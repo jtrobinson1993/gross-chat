@@ -1,0 +1,22 @@
+// main: styles.less
+
+header {
+	background-color: @color-blue-very-light;
+	border-bottom: 1px solid @color-blue-light;
+	box-shadow: @shadow-medium;
+	padding: 10px;
+
+	.logo {
+		color: @color-white;
+		text-align: center;
+		text-shadow: 0 1px 2px fade(@color-black, 50%), 0 3px 4px fade(@color-blue-dark, 50%);
+		font-size: 3.5em;
+		font-family: @font-logo;
+	}
+
+	.content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+}
