@@ -28,7 +28,7 @@
 }
 
 // COMPONENTS
-#button(@background: @color-blue-light; @color: @color-beige-light; @important: true) when (@important) {
+#button(@background: @color-blue-light; @color: @color-beige-light; @important: true; @hover: true) when (@important){
 	#material-element(@background);
 
 	&:hover {
@@ -36,7 +36,12 @@
 		border-bottom-color: @background;
 	}
 }
-#button(@background: @color-blue-light; @color: @color-beige-light; @important: true){
+#button(@background: @color-blue-light; @color: @color-beige-light; @important: true; @hover: true) when (@hover = false){
+	&:hover {
+		#material-element(@background: @background) !important;
+	}
+}
+#button(@background: @color-blue-light; @color: @color-beige-light; @important: true; @hover: true){
 	padding: 10px 20px;
 	color: @color;
 	text-align: center;
@@ -91,7 +96,6 @@
 			position: absolute;
 			top: 10px;
 			right: 10px;
-			cursor: pointer;
 			color: @color-red;
 
 			transition: color @transition-speed;

@@ -32,6 +32,7 @@ body {
 }
 
 .button {
+	#button(@color: @color-green-dark, @important: false);
 
 	&.unimportant {
 		#button(@color: @color-blue, @important: false);
@@ -46,7 +47,7 @@ body {
 	}
 
 	&.disabled {
-		#button(@background: @color-grey);
+		#button(@background: @color-grey, @hover: false);
 	}
 }
 
@@ -56,4 +57,8 @@ body {
 
 .form-input {
 	#input();
+}
+
+.fa-close {
+	cursor: pointer;
 }
