@@ -11,17 +11,15 @@ const Vote = require('../models/Vote');
 
 const router = express.Router();
 
-router.get('/list', (req, res, next) => {
-	Vote.all((err, docs) => {
-		res.json(docs);
-	});
+router.get('/list', async (req, res, next) => {
+	res.json(await Vote.all());
 });
 
 router.post('/select', (req, res, next) => {
 
 });
 
-router.post('/create', (req, res, next) => {
+router.post('/create', async (req, res, next) => {
 	if(!req.body || !req.body.options || !req.body.title) res.json({success: false, msg: 'Invalid data'});
 
 	const options = [];
@@ -34,10 +32,7 @@ router.post('/create', (req, res, next) => {
 		options: options
 	});
 
-	vote.save((err, doc) => {
-		if(err) res.json({success: false, msg: err});
-		else res.json(doc);
-	});
+	res.json(await Vote.save(vote))
 
 });
 

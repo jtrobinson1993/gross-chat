@@ -15,43 +15,42 @@ router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res
 	res.json({success: true, msg: 'profile'});
 });
 
-router.post('/authenticate', (req, res, next) => {
+router.post('/authenticate', async (req, res, next) => {
 	const name = req.body.name;
 	const password = req.body.password;
-	User.findByName(name, (err, user) => {
-		if(err || !user) res.json({success: false, msg: 'User does not exist'});
-		else User.authenticate(user, password, (err, success) => {
-			if(err) res.json({success: false, msg: err});
-			else if(!success) res.json({success: false, msg: 'Invalid credentials'});
-			else res.json({
-				token: `JWT ${jwt.sign(user, config.SECRET, {subject: String(user._id), expiresIn: 172800})}`,
-				user: {
-					id: user._id,
-					name: user.name
-				}
-			});
-		});
+
+	const user = await User.findByName(name);
+	if(!user) return res.json({success: false, msg: 'User does not exist'});
+
+	const valid = await User.authenticate(user, password);
+	if(!valid) return res.json({success: false, msg: 'Invalid credentials'});
+
+	res.json({
+		token: `JWT ${jwt.sign(user, config.SECRET, {subject: String(user._id), expiresIn: 172800})}`,
+		user: {
+			id: user._id,
+			name: user.name
+		}
 	});
+
 });
 
-router.post('/register', (req, res, next) => {
+router.post('/register', async (req, res, next) => {
 	const newUser = new User.Model({
 		name: req.body.name,
 		password: req.body.password
 	});
 
-	User.findByName(newUser.name, (err, user) => {
-		if(!user) User.save(newUser, (err, user) => {
-			res.json({
-				token: `JWT ${jwt.sign(user, config.SECRET, {subject: String(user._id), expiresIn: 172800})}`,
-				user: {
-					id: user._id,
-					name: user.name
-				}
-			});
-		});
-		else
-			res.json({success: false, msg: 'Username already exists'});
+	let user = await User.findByName(newUser.name);
+	if(user) return res.json({success: false, msg: 'Username already exists'});
+
+	user = await User.save(newUser);
+	res.json({
+		token: `JWT ${jwt.sign(user, config.SECRET, {subject: String(user._id), expiresIn: 172800})}`,
+		user: {
+			id: user._id,
+			name: user.name
+		}
 	});
 
 });

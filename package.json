@@ -9,21 +9,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "*",
-    "cookie-parser": "*",
-    "ejs": "*",
-    "express": "*",
-    "express-session": "*",
-    "passport": "*",
-    "passport-jwt": "*",
-    "http-server": "*",
-    "mongojs": "*",
-    "mongoose": "*",
     "babel-core": "*",
     "babel-preset-es2015": "*",
     "babel-preset-es2016": "*",
     "babili": "*",
     "bcryptjs": "*",
-    "jsonwebtoken": "*"
+    "bcryptjs-then": "*",
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "ejs": "*",
+    "express": "*",
+    "express-session": "*",
+    "http-server": "*",
+    "jsonwebtoken": "*",
+    "mongojs": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-jwt": "*"
   }
 }

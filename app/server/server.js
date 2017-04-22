@@ -10,6 +10,7 @@ const passportStrategy = require('./utils/passport-strategy');
 const userRoute = require('./routes/user');
 const voteRoute = require('./routes/vote');
 
+mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE_URL);
 passport.use(passportStrategy);
 

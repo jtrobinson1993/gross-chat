@@ -23,12 +23,9 @@ module.exports = {
 	Model: User,
 	findById: (id, callback) => User.findById(id, callback),
 	findByName: (name, callback) => User.findOne({name}, callback),
-	save: (user, callback) => {
-					bcrypt.genSalt(10, (err, salt) => bcrypt.hash(user.password, salt, (err, hash) => {
-						if(err) throw err;
-						user.password = hash;
-						user.save(callback);
-					}));
+	save: async (user, callback) => {
+					user.password = await bcrypt.hash(user.password, 10);
+					return user.save(callback);
 				},
 	authenticate: (user, password, callback) => bcrypt.compare(password, user.password, callback)
 };
