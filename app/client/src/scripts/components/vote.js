@@ -26,7 +26,7 @@ app.component('voteUi', {
 			});
 		};
 
-		$scope.$on('vote:option-clicked', (event, option) => {
+		$scope.$on('vote:option-selected', (event, option) => {
 			$http
 			.post('/vote/select', option)
 			.success((data) => {
@@ -139,7 +139,9 @@ app.component('voteItem', {
 	template: `
 		<div class="vote-item">
 			<div class="vote-item-title">{{$ctrl.vote.title}}</div>
-			<vote-option ng:repeat="option in $ctrl.vote.options" option="option"></vote-option>
+			<div class="vote-option-list">
+				<vote-option ng:repeat="option in $ctrl.vote.options" option="option"></vote-option>
+			</div>
 		</div>
 	`.replace(/\t|\n/g,''),
 
@@ -148,7 +150,9 @@ app.component('voteItem', {
 	},
 
 	controller: ['$scope', function($scope){
-
+		$scope.$on('vote:option-selected', (event, selectedOption) => {
+			$scope.$broadcast('vote:select-options', selectedOption);
+		});
 	}]
 
 });
@@ -172,11 +176,21 @@ app.component('voteOption', {
 
 		this.onClick = () => {
 			if(!this.isSelected){
-				this.isSelected = true;
-				this.option.voters.push($user.current());
-				$scope.$emit('vote:option-clicked', this.option);
+				$scope.$emit('vote:option-selected', this.option);
 			}
 		};
+
+		$scope.$on('vote:select-options', (event, selectedOption) => {
+			const wasSelected = this.isSelected;
+			this.isSelected = this.option.title == selectedOption.title;
+			if(wasSelected && !this.isSelected){
+				const user = $user.current();
+				const userIndex = this.options.voters.findIndex((e) => e.name == user.name);
+				this.options.voters.splice(userIndex, 1);
+			} else if(this.isSelected){
+				this.option.voters.push($user.current());
+			}
+		});
 
 	}]
 

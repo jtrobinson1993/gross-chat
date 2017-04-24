@@ -1,0 +1,84 @@
+// main: ../styles.less
+
+.vote-list {
+
+	vote-item {
+		#material-element(@background: @color-white);
+		display: block;
+		padding: 20px;
+
+		+ vote-item {
+			margin-top: 16px;
+		}
+
+		.vote-item-title {
+			font-size: 1.2em;
+			font-weight: bold;
+			margin-bottom: 16px;
+		}
+
+		vote-option + vote-option {
+			margin-left: 10px;
+		}
+
+		.vote-option-list {
+			display: flex;
+		}
+
+		.vote-option {
+			#button(@background: @color-blue-light);
+			display: flex;
+			position: relative;
+			padding-right: 45px;
+
+			&.selected {
+				#button(@background: @color-orange);
+				display: flex;
+				position: relative;
+				padding-right: 45px;
+
+				.vote-option-count {
+					border-left-color: @color-orange-dark;
+				}
+
+				&:hover {
+
+					.vote-option-count {
+						border-left-color: @color-orange-dark + @color-shade;
+					}
+
+				}
+
+			}
+
+			&:hover {
+
+				.vote-option-count {
+					border-left-color: @color-blue + @color-shade;
+				}
+
+			}
+
+			.vote-option-title {
+				margin-right: 10px;
+			}
+
+			.vote-option-count {
+				display: flex;
+				position: absolute;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				align-items: center;
+				justify-content: center;
+				padding: 5px;
+				min-width: 32px;
+				border-left: 2px solid @color-blue;
+				transition: border-left @transition-speed;
+			}
+
+		}
+
+	}
+
+}
