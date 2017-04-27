@@ -26,5 +26,14 @@
     "mongoose": "*",
     "passport": "*",
     "passport-jwt": "*"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^3.0.4",
+    "gulp-cleanhtml": "^1.0.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-less": "^3.3.0",
+    "gulp-uglifyjs": "^0.6.2"
   }
 }
