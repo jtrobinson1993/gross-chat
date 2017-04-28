@@ -11,10 +11,10 @@ const userRoute = require('./routes/user');
 const voteRoute = require('./routes/vote');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DATABASE_URL);
+mongoose.connect(config.database);
 passport.use(passportStrategy);
 
-express()
+const app = express()
 .use(bodyParser.json())
 .use(bodyParser.urlencoded({
 	extended: true
@@ -25,5 +25,19 @@ express()
 	path.join(__dirname, '../client/build')
 ))
 .use('/user', userRoute)
-.use('/vote', voteRoute)
-.listen(config.PORT, () => console.log(`Running on port ${config.PORT}`));
+.use('/vote', voteRoute);
+
+if(config.debug) app.listen(config.port, () => console.log(`Running on port ${config.port}`));
+else {
+
+	const https = require('https');
+	const fs = require('fs');
+
+	const options = {
+		key: fs.readFileSync(config.key),
+		cert: fs.readFileSync(config.cert)
+	};
+
+	https.createServer(options, app).listen(config.port, () => console.log(`Running on port ${config.port}`));
+
+}

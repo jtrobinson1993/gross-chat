@@ -26,7 +26,7 @@ router.post('/authenticate', async (req, res, next) => {
 	if(!valid) return res.json({success: false, msg: 'Invalid credentials'});
 
 	res.json({
-		token: `JWT ${jwt.sign(user, config.SECRET, {subject: String(user._id), expiresIn: 172800})}`,
+		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user._id), expiresIn: 172800})}`,
 		user: {
 			id: user._id,
 			name: user.name
@@ -46,7 +46,7 @@ router.post('/register', async (req, res, next) => {
 
 	user = await User.save(newUser);
 	res.json({
-		token: `JWT ${jwt.sign(user, config.SECRET, {subject: String(user._id), expiresIn: 172800})}`,
+		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user._id), expiresIn: 172800})}`,
 		user: {
 			id: user._id,
 			name: user.name

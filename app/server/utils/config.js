@@ -5,9 +5,16 @@ const database = config.database
 									.replace('{{password}}', args.pw || args.password)
 									.replace('{{username}}', args.name || args.username)
 
-module.exports = {
-	DEBUG: args.debug || config.debug,
-	PORT: args.port || config.port || 3000,
-	SECRET: args.secret || config.secret || 'secret_123',
-	DATABASE_URL: database
+const obj = {
+	debug: false,
+	port: 3000,
+	secret: 'secret_123',
+	database: '',
+	cert: '',
+	key: ''
 };
+
+for(let key in config) obj[key] = config[key];
+for(let key in args) obj[key] = args[key];
+
+module.exports = obj;
