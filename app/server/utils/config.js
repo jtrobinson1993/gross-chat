@@ -2,7 +2,7 @@ const config = require('../../../config.json');
 const args = require('./command-line-args');
 
 const obj = {
-	debug: false,
+	debug: true,
 	port: 3000,
 	secret: 'secret_123',
 	database: '',
