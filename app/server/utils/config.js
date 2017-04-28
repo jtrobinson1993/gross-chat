@@ -1,7 +1,13 @@
+const config = require('../../../config.json');
 const args = require('./command-line-args');
 
+const database = config.database
+									.replace('{{password}}', args.pw || args.password)
+									.replace('{{username}}', args.name || args.username)
+
 module.exports = {
-	PORT: 8001,
-	SECRET: 'secret_123',
-	DATABASE_URL: `mongodb://test:${args.pw || args.password}@ds155160.mlab.com:55160/josh3141`
+	DEBUG: args.debug || config.debug,
+	PORT: args.port || config.port || 3000,
+	SECRET: args.secret || config.secret || 'secret_123',
+	DATABASE_URL: database
 };

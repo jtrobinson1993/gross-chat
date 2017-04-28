@@ -1,0 +1,5 @@
+{
+  "port": 8001,
+  "secret": "secret_123",
+  "database": "mongodb://test:{{password}}@ds155160.mlab.com:55160/josh3141"
+}

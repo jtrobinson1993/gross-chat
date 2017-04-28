@@ -4,15 +4,12 @@
   "description": "",
   "main": "app/server/server.js",
   "scripts": {
+    "start": "node app/server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel-core": "*",
-    "babel-preset-es2015": "*",
-    "babel-preset-es2016": "*",
-    "babili": "*",
     "bcryptjs": "*",
     "bcryptjs-then": "*",
     "body-parser": "*",
@@ -34,6 +31,10 @@
     "gulp-cleanhtml": "^1.0.3",
     "gulp-concat": "^2.6.1",
     "gulp-less": "^3.3.0",
-    "gulp-uglifyjs": "^0.6.2"
+    "gulp-uglifyjs": "^0.6.2",
+    "babel-core": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-es2016": "*",
+    "babili": "*"
   }
 }
