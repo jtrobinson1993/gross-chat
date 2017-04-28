@@ -1,7 +1,7 @@
 const config = require('../../../config.json');
 const args = require('./command-line-args');
 
-const obj = {
+const defaults = {
 	debug: true,
 	port: 3000,
 	secret: 'secret_123',
@@ -12,11 +12,11 @@ const obj = {
 	password: ''
 };
 
-for(let key in config) obj[key] = config[key];
-for(let key in args) obj[key] = args[key];
+for(let key in config) defaults[key] = config[key];
+for(let key in args) defaults[key] = args[key];
 
-obj.database = obj.database
-								.replace('{{password}}', obj.pw || obj.password)
-								.replace('{{username}}', obj.name || obj.username);
+defaults.database = defaults.database
+								.replace('{{password}}', defaults.pw || defaults.password)
+								.replace('{{username}}', defaults.name || defaults.username);
 
-module.exports = obj;
+module.exports = defaults;
