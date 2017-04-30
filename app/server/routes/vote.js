@@ -12,7 +12,7 @@ const Vote = require('../models/Vote');
 const router = express.Router();
 
 router.get('/list', async (req, res, next) => {
-	res.json(await Vote.all());
+	res.json(await Vote.all().sort({date: -1}));
 });
 
 router.post('/select', (req, res, next) => {
@@ -29,7 +29,8 @@ router.post('/create', async (req, res, next) => {
 
 	const vote = new Vote.Model({
 		title: req.body.title,
-		options: options
+		options: options,
+		date: Date.now()
 	});
 
 	res.json(await Vote.save(vote))

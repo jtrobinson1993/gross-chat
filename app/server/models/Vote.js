@@ -5,6 +5,10 @@ const VoteSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
+	date: {
+		type: Number,
+		required: true
+	},
 	options: {
 		type: [{
 			title: {

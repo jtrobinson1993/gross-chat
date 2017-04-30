@@ -40,8 +40,7 @@ app.component('voteForm', {
 			$http
 			.post('/vote/create', vote)
 			.success((data) => {
-				for(let i in vote.options) vote.options[i] = {title: vote.options[i], count: 0};
-				$scope.$emit('vote:vote-added', vote);
+				$scope.$emit('vote:vote-added', data);
 				this.options = [];
 				this.title = '';
 				this.option = '';

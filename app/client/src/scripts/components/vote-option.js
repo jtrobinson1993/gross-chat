@@ -25,8 +25,8 @@ app.component('voteOption', {
 			this.isSelected = this.option.title == selectedOption.title;
 			if(wasSelected && !this.isSelected){
 				const user = $user.current();
-				const userIndex = this.options.voters.findIndex((e) => e.name == user.name);
-				this.options.voters.splice(userIndex, 1);
+				const userIndex = this.option.voters.findIndex((e) => e.name == user.name);
+				this.option.voters.splice(userIndex, 1);
 			} else if(this.isSelected){
 				this.option.voters.push($user.current());
 			}

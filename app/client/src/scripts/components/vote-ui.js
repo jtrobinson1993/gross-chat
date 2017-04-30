@@ -34,7 +34,7 @@ app.component('voteUi', {
 		});
 
 		$scope.$on('vote:vote-added', (event, vote) => {
-			this.votes.push(vote);
+			this.votes.unshift(vote);
 		});
 
 	}]
