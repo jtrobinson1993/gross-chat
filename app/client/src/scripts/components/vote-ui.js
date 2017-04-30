@@ -16,6 +16,7 @@ app.component('voteUi', {
 				if(user){
 					data.forEach(vote => {
 						const selectedOption = vote.options.find(option => option.voters.indexOf(user.id) >= 0);
+						console.log(selectedOption);
 						if(selectedOption) selectedOption.selected = true;
 					});
 				}
@@ -24,7 +25,6 @@ app.component('voteUi', {
 		};
 
 		$scope.$on('vote:selected', (event, vote, option) => {
-			console.log('selected');
 			$vote.select({vote, option}).success((data) => {
 
 			});

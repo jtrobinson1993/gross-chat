@@ -30,8 +30,19 @@ module.exports = {
 	save: (vote, callback) => vote.save(callback),
 
 	select: async ({vote, user, option}) => {
-		console.log(vote._id);
-		await Vote.update({_id: vote._id}, {$pull: {options: {voters: {$eq: user._id}}}});
-		return Vote.update({_id: vote._id}, {$addToSet: {options: {voters: user._id}}})
+		await Vote.update({
+			$and: [
+				{_id: vote._id},
+				{'options.voters': {$elemMatch: {$eq: user.id}}}
+			]},
+			{$pull: {'options.$.voters': user.id}}
+		);
+		return Vote.update({
+			$and: [
+				{_id: vote._id},
+				{'options._id': mongoose.Types.ObjectId(option._id)}
+			]},
+			{$addToSet: {'options.$.voters': user.id}}
+		);
 	},
 };

@@ -12,7 +12,7 @@ app.component('voteOption', {
 	},
 
 	controller: ['$scope', '$user', function($scope, $user){
-		this.isSelected = false;
+		this.isSelected = this.option.selected;
 
 		this.onClick = () => {
 			if(!this.isSelected){
