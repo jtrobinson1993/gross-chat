@@ -15,10 +15,12 @@ router.get('/list', async (req, res, next) => {
 	res.json(await Vote.all().sort({date: -1}));
 });
 
-router.post('/select', (req, res, next) => {
+router.post('/select', async (req, res, next) => {
 	const vote = req.body.vote;
 	const option = req.body.option;
 	const user = req.body.user;
+
+	res.json(await Vote.select({vote, option, user}));
 
 });
 

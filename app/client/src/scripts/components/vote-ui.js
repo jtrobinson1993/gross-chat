@@ -24,13 +24,10 @@ app.component('voteUi', {
 		};
 
 		$scope.$on('vote:selected', (event, vote, option) => {
-			const user = $user.current();
+			console.log('selected');
+			$vote.select({vote, option}).success((data) => {
 
-			// $http
-			// .post('/vote/select', {option, vote, user})
-			// .success((data) => {
-			//
-			// });
+			});
 		});
 
 		$scope.$on('vote:vote-added', (event, vote) => {

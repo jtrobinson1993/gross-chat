@@ -9,9 +9,9 @@ app.factory('$vote', ['$user', '$http', function($user, $http){
   }
 
   function select({vote, option}){
-
+    return $http.post('/vote/select', {vote, option, user: $user.current()});
   }
 
-  return {list, create};
+  return {list, create, select};
 
 }]);

@@ -22,7 +22,9 @@
     "mongojs": "*",
     "mongoose": "*",
     "passport": "*",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "serialize": "*",
+    "mysql": "*"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

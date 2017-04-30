@@ -27,5 +27,11 @@ module.exports = {
 	Model: Vote,
 	findById: (id, callback) => Vote.findById(id, callback),
 	all: (callback) => Vote.find({}, callback),
-	save: (vote, callback) => vote.save(callback)
+	save: (vote, callback) => vote.save(callback),
+
+	select: async ({vote, user, option}) => {
+		console.log(vote._id);
+		await Vote.update({_id: vote._id}, {$pull: {options: {voters: {$eq: user._id}}}});
+		return Vote.update({_id: vote._id}, {$addToSet: {options: {voters: user._id}}})
+	},
 };
