@@ -33,18 +33,13 @@ app.component('voteForm', {
 		};
 
 		this.addVote = () => {
-			const vote = {
+			$scope.$emit('vote:vote-added', {
 				title: this.title,
-				options: this.options
-			}
-			$http
-			.post('/vote/create', vote)
-			.success((data) => {
-				$scope.$emit('vote:vote-added', data);
-				this.options = [];
-				this.title = '';
-				this.option = '';
+				options: this.options.slice()
 			});
+			this.options = [];
+			this.title = '';
+			this.option = '';
 		};
 
 	}]

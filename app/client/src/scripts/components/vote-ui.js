@@ -7,13 +7,11 @@ app.component('voteUi', {
 		</div>
 	`.replace(/\t|\n/g,''),
 
-	controller: ['$http', '$scope', '$user', function($http, $scope, $user){
+	controller: ['$scope', '$user', '$vote', function($scope, $user, $vote){
 		this.votes = [];
 
 		this.$onInit = () => {
-			$http
-			.get('/vote/list')
-			.success((data) => {
+			$vote.list().success((data) => {
 				const user = $user.current();
 				if(user){
 					data.forEach(vote => {
@@ -25,16 +23,18 @@ app.component('voteUi', {
 			});
 		};
 
-		$scope.$on('vote:option-selected', (event, option) => {
-			$http
-			.post('/vote/select', option)
-			.success((data) => {
+		$scope.$on('vote:selected', (event, vote, option) => {
+			const user = $user.current();
 
-			});
+			// $http
+			// .post('/vote/select', {option, vote, user})
+			// .success((data) => {
+			//
+			// });
 		});
 
 		$scope.$on('vote:vote-added', (event, vote) => {
-			this.votes.unshift(vote);
+			$vote.create(vote).success(data => this.votes.unshift(data));
 		});
 
 	}]

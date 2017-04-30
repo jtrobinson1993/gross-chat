@@ -16,6 +16,9 @@ router.get('/list', async (req, res, next) => {
 });
 
 router.post('/select', (req, res, next) => {
+	const vote = req.body.vote;
+	const option = req.body.option;
+	const user = req.body.user;
 
 });
 

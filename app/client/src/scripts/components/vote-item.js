@@ -16,6 +16,7 @@ app.component('voteItem', {
 	controller: ['$scope', function($scope){
 		$scope.$on('vote:option-selected', (event, selectedOption) => {
 			$scope.$broadcast('vote:select-options', selectedOption);
+			$scope.$emit('vote:selected', this.vote, selectedOption);
 		});
 	}]
 
