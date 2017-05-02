@@ -23,8 +23,9 @@
     "mongoose": "*",
     "passport": "*",
     "passport-jwt": "*",
-    "serialize": "*",
-    "mysql": "*"
+    "mysql": "*",
+    "knex": "*",
+    "bookshelf": "*"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

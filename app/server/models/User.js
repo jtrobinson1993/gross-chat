@@ -1,31 +1,21 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const Bookshelf = require('../utils/bookshelf');
 
-const UserSchema = mongoose.Schema({
-	name: {
-		type: String,
-		required: true
-	},
-	password: {
-		type: String,
-		required: true
-	},
-	votes: [{
-			vote: mongoose.Schema.Types.ObjectId,
-			option: mongoose.Schema.Types.ObjectId
-	}]
+require('./Vote');
+module.exports = Bookshelf.model('User', {
+
+  tableName: 'users',
+
+  initialize(){
+    this.on('creating', async (model, attrs, options) => {
+      this.set('password', await bcrypt.hash(this.get('password'), 10));
+    });
+  },
+
+  authenticate(password){
+    return bcrypt.compare(password, this.get('password'));
+  },
+
+  votes(){ return this.hasMany('Vote'); }
+
 });
-
-const User = mongoose.model('User', UserSchema);
-
-module.exports = {
-	Schema: UserSchema,
-	Model: User,
-	findById: (id, callback) => User.findById(id, callback),
-	findByName: (name, callback) => User.findOne({name}, callback),
-	save: async (user, callback) => {
-					user.password = await bcrypt.hash(user.password, 10);
-					return user.save(callback);
-				},
-	authenticate: (user, password, callback) => bcrypt.compare(password, user.password, callback)
-};

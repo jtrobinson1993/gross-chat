@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+
 const config = require('../utils/config');
 const passportStrategy = require('../utils/passport-strategy');
 
@@ -11,47 +12,33 @@ const Vote = require('../models/Vote');
 
 const router = express.Router();
 
+function token(user) {
+	return {
+		user,
+		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user.id), expiresIn: 172800})}`
+	};
+}
+
 router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
 	res.json({success: true, msg: 'profile'});
 });
 
 router.post('/authenticate', async (req, res, next) => {
-	const name = req.body.name;
-	const password = req.body.password;
+	const user = await new User({name: req.body.name}).fetch();
 
-	const user = await User.findByName(name);
-	if(!user) return res.json({success: false, msg: 'User does not exist'});
-
-	const valid = await User.authenticate(user, password);
-	if(!valid) return res.json({success: false, msg: 'Invalid credentials'});
-
-	res.json({
-		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user._id), expiresIn: 172800})}`,
-		user: {
-			id: user._id,
-			name: user.name
-		}
-	});
+	if(!user) res.json({success: false, msg: 'User does not exist'});
+	else if(!user.authenticate(req.body.password)) res.json({success: false, msg: 'Invalid credentials'});
+	else res.json(token(user));
 
 });
 
 router.post('/register', async (req, res, next) => {
-	const newUser = new User.Model({
-		name: req.body.name,
-		password: req.body.password
+	const user = new User({
+		name: req.body.name
 	});
 
-	let user = await User.findByName(newUser.name);
-	if(user) return res.json({success: false, msg: 'Username already exists'});
-
-	user = await User.save(newUser);
-	res.json({
-		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user._id), expiresIn: 172800})}`,
-		user: {
-			id: user._id,
-			name: user.name
-		}
-	});
+	if(await user.fetch()) res.json({success: false, msg: 'Username already exists'});
+	else res.json(token(await user.save('password', req.body.password)));
 
 });
 
