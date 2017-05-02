@@ -22,11 +22,11 @@ app.factory('$user', ['$cookies', '$http', function($cookies, $http){
 		}
 	}
 
-	function login(name, password){
+	function login({name, password}){
 		return $http.post('/user/authenticate', {name, password});
 	}
 
-	function register(name, password){
+	function register({name, password}){
 		return $http.post('/user/register', {name, password});
 	}
 

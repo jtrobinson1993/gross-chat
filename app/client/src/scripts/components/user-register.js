@@ -18,7 +18,7 @@ app.component('userRegister', {
 		this.register = () => {
 			if(!this.canSubmit()) return;
 			$user
-			.register(this.name, this.password)
+			.register(this)
 			.success((data) => {
 				$user.data(data);
 				$scope.$emit('user:logged-in', data.user);

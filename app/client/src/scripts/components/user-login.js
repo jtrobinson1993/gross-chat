@@ -17,7 +17,7 @@ app.component('userLogin', {
 		this.login = () => {
 			if(!this.canSubmit()) return;
 			$user
-			.login(this.name, this.password)
+			.login(this)
 			.success((data) => {
 				$user.data(data);
 				$scope.$emit('user:logged-in', data.user);
