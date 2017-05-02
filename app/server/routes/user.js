@@ -33,9 +33,7 @@ router.post('/authenticate', async (req, res, next) => {
 });
 
 router.post('/register', async (req, res, next) => {
-	const user = new User({
-		name: req.body.name
-	});
+	const user = new User({name: req.body.name});
 
 	if(await user.fetch()) res.json({success: false, msg: 'Username already exists'});
 	else res.json(token(await user.save('password', req.body.password)));
