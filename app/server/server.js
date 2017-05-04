@@ -9,6 +9,8 @@ const passportStrategy = require('./utils/passport-strategy');
 const userRoute = require('./routes/user');
 const voteRoute = require('./routes/vote');
 
+global.Promise = require('bluebird');
+
 passport.use(passportStrategy);
 
 const app = express()

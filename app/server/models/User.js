@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const Bookshelf = require('../utils/bookshelf');
 
 require('./Vote');
-module.exports = Bookshelf.model('User', {
+const User = Bookshelf.model('User', {
 
   tableName: 'users',
 
@@ -12,10 +12,15 @@ module.exports = Bookshelf.model('User', {
     });
   },
 
+  votes(){ return this.hasMany('Vote'); },
+
   authenticate(password){
     return bcrypt.compare(password, this.get('password'));
-  },
-
-  votes(){ return this.hasMany('Vote'); }
+  }
 
 });
+
+module.exports = {
+  Model: User,
+  Collection: Bookshelf.Collection.extend({model: User})
+}

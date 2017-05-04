@@ -8,31 +8,27 @@ const passportStrategy = require('../utils/passport-strategy');
 
 const User = require('../models/User');
 const Vote = require('../models/Vote');
+const Option = require('../models/Option');
+
+const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-	//res.json(await Vote.all().sort({date: -1}));
-	res.json({});
+router.get('/:id', async (req, res, next) => {
+	const id = req.id ? {id: req.id} : {};
+	res.json((await new Vote.Model(id).fetch({withRelated: 'options'})).toJSON());
 });
 
 router.post('/', async (req, res, next) => {
-	// if(!req.body || !req.body.options || !req.body.title) res.json({success: false, msg: 'Invalid data'});
-	//
-	// const options = [];
-	//
-	// for(let title of req.body.options)
-	// 	options.push({title, voters: []});
-	//
-	// const vote = new Vote.Model({
-	// 	title: req.body.title,
-	// 	options: options,
-	// 	date: Date.now()
-	// });
-	//
-	// res.json(await Vote.save(vote))
+	const {title, options} = req.body;
 
-	res.json({});
+	const topic = await new Topic.Model({title}).save();
+
+	await Promise.map(options, (option) => {
+		topic.related('options').create(new Option.Model({title: option}));
+	});
+
+	res.json(topic.toJSON());
 });
 
 router.post('/select', async (req, res, next) => {

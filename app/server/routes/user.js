@@ -20,11 +20,14 @@ function token(user) {
 }
 
 router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+
 	res.json({success: true, msg: 'profile'});
+
 });
 
 router.post('/authenticate', async (req, res, next) => {
-	const user = await new User({name: req.body.name}).fetch();
+
+	const user = await new User.Model({name: req.body.name}).fetch();
 
 	if(!user) res.json({success: false, msg: 'User does not exist'});
 	else if(!user.authenticate(req.body.password)) res.json({success: false, msg: 'Invalid credentials'});
@@ -33,7 +36,8 @@ router.post('/authenticate', async (req, res, next) => {
 });
 
 router.post('/register', async (req, res, next) => {
-	const user = new User({name: req.body.name});
+	
+	const user = new User.Model({name: req.body.name});
 
 	if(await user.fetch()) res.json({success: false, msg: 'Username already exists'});
 	else res.json(token(await user.save('password', req.body.password)));

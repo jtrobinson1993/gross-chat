@@ -25,7 +25,9 @@
     "passport-jwt": "*",
     "mysql": "*",
     "knex": "*",
-    "bookshelf": "*"
+    "bookshelf": "*",
+    "lodash": "*",
+    "bluebird": "*"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
