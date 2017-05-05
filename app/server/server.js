@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
+global.Promise = require('bluebird');
+
 const shell = require('./shell');
 
 const config = require('./utils/config');
@@ -10,8 +12,6 @@ const passportStrategy = require('./utils/passport-strategy');
 
 const userRoute = require('./routes/user');
 const voteRoute = require('./routes/vote');
-
-global.Promise = require('bluebird');
 
 passport.use(passportStrategy);
 

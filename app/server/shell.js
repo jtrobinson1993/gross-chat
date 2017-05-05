@@ -10,47 +10,50 @@ const shell = require('readline').createInterface({
     return [hits&&hits.length>0 ? hits : completions, line];
   }
 });
+
+const startTime = Date.now();
+
 const prompt1 = 'sh> '.green;
 const prompt2 = '  * '.red;
 const prompt3 = '  - '.grey;
+
+function formatTimeDifference(ms){
+  const ms2m = 60000;
+  const ms2h = 3600000;
+  const ms2d = 86400000;
+  const days = (ms/ms2d)|0;
+  const hours = ((ms - days * ms2d)/ms2h)|0;
+  const minutes = ((ms - hours * ms2h)/ms2m)|0;
+  const seconds = ((ms - minutes * ms2m)/1000)|0;
+  return [days?days+'d':'', hours?hours+'h':'', minutes?minutes+'m':'', seconds?seconds+'s':''].join('');
+}
 
 function execute(line){
   const [cmd, ...args] = line.split(/('.*?'|".*?"|\S+)/g).filter(s=>s.trim()).map(s=>s.replace(/"(.*)"/g,"$1"));
   for(const command of Command.List)
     if(command.is(cmd)) return command.execute(args);
-  return new Promise((resolve, reject) => resolve());
 }
 
 function start(){
   const message = `| ${config.ssl ? 'HTTPS' : 'HTTP'} server running on port ${config.port} |`;
   const border = `+${'-'.repeat(message.length-2)}+`;
-  console.log(`${border}\n${message}\n${border}`.cyan);
+  const intro = 'm\'shell v0.1 (type "help")';
+  console.log(`${border}\n${message}\n${border}\n${' '.repeat(message.length/3-8) + intro}\n`.cyan);
   shell.setPrompt(prompt1);
   shell.prompt();
   shell.on('line', (line) => {
-    execute(line).then(() => {;
-      shell.prompt();
-    })
+    const result = execute(line);
+    result ? result.then(() => shell.prompt()) : shell.prompt();
   });
 }
 
-function Command({aliases, help, execute = ()=>undefined, asynchronous = false}){
+function Command({aliases, help, execute = ()=>undefined}){
   if(typeof aliases === 'string') aliases = [aliases];
   aliases = aliases.map(alias => alias.toLowerCase());
   this.aliases = aliases;
   this.help = help;
-  this.execute = asynchronous ? execute.bind(this) : () => {
-    return new Promise((resolve, reject) => {
-      execute.apply(this, arguments);
-      resolve();
-    });
-  };
+  this.execute = execute.bind(this);
   this.is = (cmd) => cmd&&aliases.includes(cmd.toLowerCase());
-  this.prompt = (message, args) => {
-    shell.question(message, (answer) => {
-      if(Command.Yes.is(answer)) this.execute(args);
-    });
-  };
   Command.List.push(this);
   Command.Aliases = Command.Aliases.concat(aliases);
 }
@@ -69,15 +72,8 @@ Command.prompt = (message, exec) => {
 
 Command.Yes = new Command({aliases: ['yes', 'y']});
 Command.No = new Command({aliases: ['no', 'n']});
-Command.Exit = new Command({
-  aliases: ['exit','quit','kill'],
-  help: 'Kill the server',
-  execute: Command.prompt('Are you sure?', (args) => {
-    process.exit(0);
-  })
-});
 Command.Help = new Command({
-  aliases: ['help'],
+  aliases: ['help', 'man', 'command-list'],
   execute: (args) => {
     Command.List
     .sort((a,b) => {
@@ -89,38 +85,48 @@ Command.Help = new Command({
     .filter(command => command.help)
     .forEach((command,index) => {
       const [primary, ...aliases] = command.aliases;
-      Command.print(`${primary} ${aliases.join('/').grey}: ${command.help.italic}`);
+      Command.print(`${primary}${(aliases.length>0?' ':'') + aliases.join('/').grey}: ${command.help.italic}`);
     });
   }
+});
+Command.Exit = new Command({
+  aliases: ['exit', 'quit', 'kill'],
+  help: 'Kill the server',
+  execute: Command.prompt('Are you sure?', (args) => {
+    process.exit(0);
+  })
 });
 Command.Config = new Command({
   aliases: ['config', 'info'],
   help: 'Get configuration settings',
   execute: ([key, ...rest]) => Command.print(config[key])
 });
+Command.Time = new Command({
+  aliases: ['time', 'up-time', 'start-time'],
+  help: 'Details about server up time',
+  execute: () => {
+    Command.print(`Start time: ${new Date(startTime)}`);
+    Command.print(`Up time: ${formatTimeDifference(Date.now() - startTime)}`);
+  }
+});
 Command.Eval = new Command({
   aliases: ['eval'],
   help: Command.dangerous('Evaluate expression'),
-  asynchronous: true,
   execute: ([expr,...rest]) => {
-    return new Promise((resolve, reject) => {
-      try {
-        Command.print(eval(expr));
-      } catch (e) {
-        Command.print(e);
-      }
-      resolve();
-    });
+    try {
+      Command.print(eval(expr));
+    } catch (e) {
+      Command.print(e);
+    }
   }
 });
 Command.Query = new Command({
-  aliases: ['query'],
+  aliases: ['query', 'sql'],
   help: Command.dangerous('Query database'),
-  asynchronous: true,
   execute: ([query, ...rest]) => {
     return new Promise(async (resolve, reject) => {
-      const result = await knex.raw(query);
-      Command.print(JSON.stringify(result[0]));
+      const [result, ...rest] = await knex.raw(query);
+      result.forEach(r => Command.print(JSON.stringify(r)));
       resolve();
     });
   }
