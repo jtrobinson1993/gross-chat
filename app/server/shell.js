@@ -5,7 +5,7 @@ const shell = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
   completer(line){
-    const completions = Command.Aliases;
+    const completions = line ? Command.Aliases : [];
     const hits = completions.filter(completion => completion.indexOf(line) == 0);
     return [hits&&hits.length>0 ? hits : completions, line];
   }
@@ -124,9 +124,16 @@ Command.Query = new Command({
   aliases: ['query', 'sql'],
   help: Command.dangerous('Query database'),
   execute: ([query, ...rest]) => {
+    const queryStart = Date.now();
+    if(!query) return;
     return new Promise(async (resolve, reject) => {
-      const [result, ...rest] = await knex.raw(query);
-      result.forEach(r => Command.print(JSON.stringify(r)));
+      try {
+        const [result, ...rest] = await knex.raw(query);
+        result.forEach(r => Command.print(JSON.stringify(r)));
+      } catch(e) {
+        Command.print(e);
+      }
+      Command.print(`Execution time: ${Date.now() - queryStart}ms`.grey);
       resolve();
     });
   }
