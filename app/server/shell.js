@@ -24,11 +24,12 @@ function formatTimeDifference(ms){
   const days = (ms/ms2d)|0;
   const hours = ((ms -= days * ms2d)/ms2h)|0;
   const minutes = ((ms -= hours * ms2h)/ms2m)|0;
-  const seconds = ((ms -= minutes * ms2m)/1000)|0;
+  const seconds = Math.round((ms -= minutes * ms2m)/10)/100;
   return [days>0?days+'d':'',
           hours>0?hours+'h':'',
-          minutes?minutes+'m':'',
-          seconds?seconds+'s':''].join('');
+          minutes>0?minutes+'m':'',
+          seconds>0?seconds+'s':'']
+          .filter(s => s.length>0).join(' ');
 }
 
 function execute(line){
