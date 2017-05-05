@@ -22,10 +22,13 @@ function formatTimeDifference(ms){
   const ms2h = 3600000;
   const ms2d = 86400000;
   const days = (ms/ms2d)|0;
-  const hours = ((ms - days * ms2d)/ms2h)|0;
-  const minutes = ((ms - hours * ms2h)/ms2m)|0;
-  const seconds = ((ms - minutes * ms2m)/1000)|0;
-  return [days?days+'d':'', hours?hours+'h':'', minutes?minutes+'m':'', seconds?seconds+'s':''].join('');
+  const hours = ((ms -= days * ms2d)/ms2h)|0;
+  const minutes = ((ms -= hours * ms2h)/ms2m)|0;
+  const seconds = ((ms -= minutes * ms2m)/1000)|0;
+  return [days>0?days+'d':'',
+          hours>0?hours+'h':'',
+          minutes?minutes+'m':'',
+          seconds?seconds+'s':''].join('');
 }
 
 function execute(line){
