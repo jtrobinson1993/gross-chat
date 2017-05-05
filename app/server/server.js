@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
+const shell = require('./shell');
+
 const config = require('./utils/config');
 const passportStrategy = require('./utils/passport-strategy');
 
@@ -26,7 +28,7 @@ const app = express()
 .use('/user', userRoute)
 .use('/vote', voteRoute);
 
-if(!config.ssl) app.listen(config.port, () => console.log(`Running on port ${config.port}`));
+if(!config.ssl) app.listen(config.port, shell.start);
 else {
 
 	const https = require('https');
@@ -37,6 +39,6 @@ else {
 		cert: fs.readFileSync(config.ssl_cert)
 	};
 
-	https.createServer(options, app).listen(config.port, () => console.log(`Running on port ${config.port}`));
+	https.createServer(options, app).listen(config.port, shell.start);
 
 }

@@ -35,7 +35,7 @@ router.post('/', async (req, res, next) => {
 
 });
 
-router.post('/select', async (req, res, next) => {
+router.post('/:id/select', async (req, res, next) => {
 
 	// const {vote, option, user} = req.body;
 	//

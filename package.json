@@ -27,7 +27,8 @@
     "knex": "*",
     "bookshelf": "*",
     "lodash": "*",
-    "bluebird": "*"
+    "bluebird": "*",
+    "colors": "*"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
