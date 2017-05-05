@@ -1,4 +1,5 @@
 const config = require('./utils/config');
+const knex = require('./utils/bookshelf').knex;
 const colors = require('colors');
 const shell = require('readline').createInterface({
   input: process.stdin,
@@ -17,6 +18,7 @@ function execute(line){
   const [cmd, ...args] = line.split(/('.*?'|".*?"|\S+)/g).filter(s=>s.trim()).map(s=>s.replace(/"(.*)"/g,"$1"));
   for(const command of Command.List)
     if(command.is(cmd)) return command.execute(args);
+  return new Promise((resolve, reject) => resolve());
 }
 
 function start(){
@@ -26,21 +28,27 @@ function start(){
   shell.setPrompt(prompt1);
   shell.prompt();
   shell.on('line', (line) => {
-    execute(line);
-    shell.prompt();
+    execute(line).then(() => {;
+      shell.prompt();
+    })
   });
 }
 
-function Command({aliases, help, execute = ()=>undefined}){
+function Command({aliases, help, execute = ()=>undefined, asynchronous = false}){
   if(typeof aliases === 'string') aliases = [aliases];
   aliases = aliases.map(alias => alias.toLowerCase());
   this.aliases = aliases;
   this.help = help;
-  this.execute = execute.bind(this);
-  this.is = (cmd) => aliases.includes(cmd.toLowerCase());
+  this.execute = asynchronous ? execute.bind(this) : () => {
+    return new Promise((resolve, reject) => {
+      execute.apply(this, arguments);
+      resolve();
+    });
+  };
+  this.is = (cmd) => cmd&&aliases.includes(cmd.toLowerCase());
   this.prompt = (message, args) => {
     shell.question(message, (answer) => {
-      if(Command.YES.is(answer)) this.execute(args);
+      if(Command.Yes.is(answer)) this.execute(args);
     });
   };
   Command.List.push(this);
@@ -49,6 +57,7 @@ function Command({aliases, help, execute = ()=>undefined}){
 Command.List = [];
 Command.Aliases = [];
 Command.print = (message) => console.log(`${prompt2}${message}`);
+Command.dangerous = (help) => help+' (dangerous!)'.red;
 Command.prompt = (message, exec) => {
   return (args) => {
     shell.question(`${prompt2}${message} (y/n): `, (answer) => {
@@ -91,13 +100,29 @@ Command.Config = new Command({
 });
 Command.Eval = new Command({
   aliases: ['eval'],
-  help: 'Evaluate expression '+'(dangerous!)'.red,
+  help: Command.dangerous('Evaluate expression'),
+  asynchronous: true,
   execute: ([expr,...rest]) => {
-    try {
-      Command.print(eval(expr));
-    } catch (e) {
-      Command.print(e);
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        Command.print(eval(expr));
+      } catch (e) {
+        Command.print(e);
+      }
+      resolve();
+    });
+  }
+});
+Command.Query = new Command({
+  aliases: ['query'],
+  help: Command.dangerous('Query database'),
+  asynchronous: true,
+  execute: ([query, ...rest]) => {
+    return new Promise(async (resolve, reject) => {
+      const result = await knex.raw(query);
+      Command.print(JSON.stringify(result[0]));
+      resolve();
+    });
   }
 });
 
