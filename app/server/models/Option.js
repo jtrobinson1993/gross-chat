@@ -5,7 +5,8 @@ const Option = Bookshelf.model('Option', {
 
   tableName: 'options',
 
-  topic(){ return this.belongsTo('Topic'); }
+  topic(){ return this.belongsTo('Topic'); },
+  voters(){ return this.belongsToMany('User').through('Vote'); }
 
 });
 
