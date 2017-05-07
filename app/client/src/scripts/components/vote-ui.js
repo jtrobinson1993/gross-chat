@@ -15,8 +15,11 @@ app.component('voteUi', {
 				const user = $user.current();
 				if(user){
 					data.forEach(vote => {
-						const selectedOption = vote.options.find(option => option.voters.indexOf(user.id) >= 0);
-						console.log(selectedOption);
+						const selectedOption = vote.options.find(option => {
+							for(let index in option.voters)
+								if(option.voters[index].id == user.id) return true;
+							return false;
+						});
 						if(selectedOption) selectedOption.selected = true;
 					});
 				}

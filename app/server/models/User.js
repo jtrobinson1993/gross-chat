@@ -1,11 +1,12 @@
 const bcrypt = require('bcryptjs');
 const Bookshelf = require('../utils/bookshelf');
+const tableName = 'users';
 
 require('./Vote');
 require('./Option');
 const User = Bookshelf.model('User', {
 
-  tableName: 'users',
+  tableName,
 
   initialize(){
     this.on('creating', async (model, attrs, options) => {
@@ -23,5 +24,7 @@ const User = Bookshelf.model('User', {
 
 module.exports = {
   Model: User,
-  Collection: Bookshelf.Collection.extend({model: User})
+  Collection: Bookshelf.Collection.extend({model: User}),
+  get QueryBuilder(){ return Bookshelf.knex(tableName) },
+  get Query(){ return Bookshelf.knex.raw }
 }

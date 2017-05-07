@@ -8,8 +8,8 @@ app.factory('$vote', ['$user', '$http', function($user, $http){
     return $http.post('/vote', {title, options});
   }
 
-  function select({vote, option}){
-    return $http.post('/vote/select', {vote, option, user: $user.current()});
+  function select({option, vote}){
+    return $http.post(`/vote/${vote.id}/select`, {option, user: $user.current()});
   }
 
   return {list, create, select};
