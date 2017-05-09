@@ -22,14 +22,20 @@ app.factory('$user', ['$cookies', '$http', function($cookies, $http){
 		}
 	}
 
+	function isLoggedIn(){ return current(); }
+
 	function login({name, password}){
 		return $http.post('/user/authenticate', {name, password});
+	}
+
+	function logout(){
+		data({});
 	}
 
 	function register({name, password}){
 		return $http.post('/user/register', {name, password});
 	}
 
-	return {current, token, data, login, register};
+	return {current, token, data, login, logout, isLoggedIn, register};
 
 }]);

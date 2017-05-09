@@ -1,11 +1,6 @@
 app.component('topicUi', {
 
-	template: `
-		<div class="component topic-ui">
-			<topic-form></topic-form>
-			<topic-list topics="$ctrl.topics"></topic-list>
-		</div>
-	`.replace(/\t|\n/g,''),
+	templateUrl: 'template.html',
 
 	controller: ['$scope', '$user', '$topic', function($scope, $user, $topic){
 		this.topics = [];

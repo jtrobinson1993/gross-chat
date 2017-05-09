@@ -1,6 +1,7 @@
 const config = require('./utils/config');
 const knex = require('./utils/bookshelf').knex;
 const colors = require('colors');
+const spawn = require('child_process').spawn;
 const shell = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -34,6 +35,35 @@ function formatTimeDifference(ms){
 
 function trace(...strs){
   config.debug && strs && strs.forEach(console.log);
+}
+
+function hidden(query, callback) {
+  const stdin = process.openStdin();
+  const onPasswordEntry = (char) => {
+    char = char + "";
+    switch (char) {
+      case "\n": case "\r": case "\u0004":
+        stdin.removeListener('data', onPasswordEntry);
+        break;
+      default:
+        process.stdout.write("\033[2K\033[200D" + query + Array(shell.line.length+1).join("*"));
+        break;
+    }
+  };
+
+  process.stdin.on('data', onPasswordEntry);
+
+  shell.question(query, (value) => {
+    shell.history = shell.history.slice(1);
+    callback(value);
+  });
+}
+
+function authenticate(callback){
+  hidden('Password: ', (value) => {
+    config.password = value;
+    callback();
+  });
 }
 
 function execute(line){
@@ -147,4 +177,4 @@ Command.Query = new Command({
   }
 });
 
-module.exports = {start, trace};
+module.exports = {authenticate, start, trace};

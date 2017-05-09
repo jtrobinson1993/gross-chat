@@ -1,11 +1,6 @@
 app.component('topicOption', {
 
-	template: `
-		<div class="topic-option" ng:class="$ctrl.isSelected ? 'selected': ''" ng:click="$ctrl.onClick()" data-id="$ctrl.option._id">
-			<div class="topic-option-title">{{$ctrl.option.title}}</div>
-			<div class="topic-option-count">{{$ctrl.option.voters.length}}</div>
-		</div>
-	`.replace(/\t|\n/g,''),
+	templateUrl: 'template.html',
 
 	bindings: {
 		option: '<'
