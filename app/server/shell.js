@@ -32,6 +32,10 @@ function formatTimeDifference(ms){
           .filter(s => s.length>0).join(' ');
 }
 
+function trace(...strs){
+  config.debug && strs && strs.forEach(console.log);
+}
+
 function execute(line){
   const [cmd, ...args] = line.split(/('.*?'|".*?"|\S+)/g).filter(s=>s.trim()).map(s=>s.replace(/"(.*)"/g,"$1"));
   for(const command of Command.List)
@@ -143,4 +147,4 @@ Command.Query = new Command({
   }
 });
 
-module.exports = {start};
+module.exports = {start, trace};

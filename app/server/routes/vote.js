@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+
+const response = require('./response');
+const shell = require('../shell');
 const config = require('../utils/config');
 const passportStrategy = require('../utils/passport-strategy');
 
@@ -15,7 +18,7 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
 
-	let response;
+	let json;
 
 	try {
 		let topics = await new Topic.Collection()
@@ -24,19 +27,19 @@ router.get('/', async (req, res, next) => {
 				withRelated: ['options', {'options.voters': qb=>qb.column('users.id')}]
 			});
 
-		response = topics.toJSON();
+		json = topics.toJSON();
 	} catch (e) {
-		config.trace(e);
-		response = {success: false, msg: 'Cannot retrieve topic list'};
+		shell.trace(e);
+		json = response.failure('Cannot retrieve topic list');
 	}
 
-	res.json(response);
+	res.json(json);
 
 });
 
 router.get('/:id', async (req, res, next) => {
 
-	let response;
+	let json;
 
 	try {
 		let topic = await new Topic.Model({id: req.params.id})
@@ -44,10 +47,10 @@ router.get('/:id', async (req, res, next) => {
 				withRelated: ['options', {'options.voters': qb=>qb.column('users.id')}]
 			});
 
-		response = topic.toJSON();
+		json = topic.toJSON();
 	} catch (e) {
-		config.trace(e);
-		response = {success: false, msg: 'Cannot retrieve topic'};
+		shell.trace(e);
+		json = response.failure('Cannot retrieve topic');
 	}
 
 	res.json(reponse);
@@ -57,20 +60,20 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
 
 	const {title, options} = req.body;
-	let response;
+	let json;
 
 	try {
 		let topic = await new Topic.Model({title}).save();
 		await Promise.map(options, title => topic.related('options').create(new Option.Model({title})));
 		topic = await topic.load(['options', 'options.voters']);
 
-		response = topic.toJSON();
+		json = topic.toJSON();
 	} catch (e) {
-		config.trace(e);
-		response = {success: false, msg: 'Topic creation failed'};
+		shell.trace(e);
+		json = response.failure('Topic creation failed');
 	}
 
-	res.json(response);
+	res.json(json);
 
 });
 
@@ -78,7 +81,7 @@ router.post('/:id/select', async (req, res, next) => {
 
 	const id = req.params.id;
 	const {option, user} = req.body;
-	let response;
+	let json;
 
 	try {
 		await new Vote.Model().where({
@@ -87,13 +90,13 @@ router.post('/:id/select', async (req, res, next) => {
 		}).destroy();
 		const vote = await new Vote.Model({user_id: user.id, option_id: option.id, topic_id: id}).save();
 
-		response = vote.toJSON();
+		json = vote.toJSON();
 	} catch (e) {
-		config.trace(e);
-		response = {success: false, msg: 'Vote cast failed'};
+		shell.trace(e);
+		json = response.failure('Vote cast failed');
 	}
 
-	res.json(response);
+	res.json(json);
 
 });
 
