@@ -79,16 +79,13 @@ router.post('/', async (req, res, next) => {
 
 router.post('/:id/select', async (req, res, next) => {
 
-	const id = req.params.id;
-	const {option, user} = req.body;
+	const topic_id = req.params.id;
+	const {option: {id: option_id}, user: {id: user_id}} = req.body;
 	let json;
 
 	try {
-		await new Vote.Model().where({
-			topic_id: id,
-			user_id: user.id
-		}).destroy();
-		const vote = await new Vote.Model({user_id: user.id, option_id: option.id, topic_id: id}).save();
+		await new Vote.Model().where({topic_id, user_id}).destroy();
+		const vote = await new Vote.Model({topic_id, user_id, option_id}).save();
 
 		json = vote.toJSON();
 	} catch (e) {
