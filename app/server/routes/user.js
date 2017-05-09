@@ -4,8 +4,8 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-const response = require('./response');
 const shell = require('../shell');
+const response = require('../utils/response');
 const config = require('../utils/config');
 const passportStrategy = require('../utils/passport-strategy');
 
