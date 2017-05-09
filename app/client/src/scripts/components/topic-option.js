@@ -1,9 +1,9 @@
-app.component('voteOption', {
+app.component('topicOption', {
 
 	template: `
-		<div class="vote-option" ng:class="$ctrl.isSelected ? 'selected': ''" ng:click="$ctrl.onClick()" data-id="$ctrl.option._id">
-			<div class="vote-option-title">{{$ctrl.option.title}}</div>
-			<div class="vote-option-count">{{$ctrl.option.voters.length}}</div>
+		<div class="topic-option" ng:class="$ctrl.isSelected ? 'selected': ''" ng:click="$ctrl.onClick()" data-id="$ctrl.option._id">
+			<div class="topic-option-title">{{$ctrl.option.title}}</div>
+			<div class="topic-option-count">{{$ctrl.option.voters.length}}</div>
 		</div>
 	`.replace(/\t|\n/g,''),
 
@@ -16,11 +16,11 @@ app.component('voteOption', {
 
 		this.onClick = () => {
 			if(!this.isSelected){
-				$scope.$emit('vote:option-selected', this.option);
+				$scope.$emit('topic:option-selected', this.option);
 			}
 		};
 
-		$scope.$on('vote:select-options', (event, selectedOption) => {
+		$scope.$on('topic:select-options', (event, selectedOption) => {
 			const wasSelected = this.isSelected;
 			this.isSelected = this.option.title == selectedOption.title;
 			if(wasSelected && !this.isSelected){

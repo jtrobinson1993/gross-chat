@@ -1,31 +1,31 @@
 // main: ../styles.less
 
-.vote-list {
+.topic-list {
 
-	vote-item {
+	topic-item {
 		#material-element(@background: @color-white);
 		display: block;
 		padding: 20px;
 
-		+ vote-item {
+		+ topic-item {
 			margin-top: 16px;
 		}
 
-		.vote-item-title {
+		.topic-item-title {
 			font-size: 1.2em;
 			font-weight: bold;
 			margin-bottom: 16px;
 		}
 
-		vote-option + vote-option {
+		topic-option + topic-option {
 			margin-left: 10px;
 		}
 
-		.vote-option-list {
+		.topic-option-list {
 			display: flex;
 		}
 
-		.vote-option {
+		.topic-option {
 			#button(@background: @color-blue-light);
 			display: flex;
 			position: relative;
@@ -37,13 +37,13 @@
 				position: relative;
 				padding-right: 45px;
 
-				.vote-option-count {
+				.topic-option-count {
 					border-left-color: @color-green-dark;
 				}
 
 				&:hover {
 
-					.vote-option-count {
+					.topic-option-count {
 						border-left-color: @color-green-dark + @color-shade;
 					}
 
@@ -53,17 +53,17 @@
 
 			&:hover {
 
-				.vote-option-count {
+				.topic-option-count {
 					border-left-color: @color-blue + @color-shade;
 				}
 
 			}
 
-			.vote-option-title {
+			.topic-option-title {
 				margin-right: 10px;
 			}
 
-			.vote-option-count {
+			.topic-option-count {
 				display: flex;
 				position: absolute;
 				right: 0;
