@@ -6,6 +6,7 @@ const babel = require('gulp-babel');
 const minifyJS = require('gulp-uglifyjs');
 const minifyCSS = require('gulp-clean-css');
 const minifyHTML = require('gulp-cleanhtml');
+const replace = require('gulp-replace');
 const embedTemplates = require('gulp-angular-embed-templates');
 
 gulp.task('default', ['less', 'js', 'html']);
@@ -21,7 +22,10 @@ gulp.task('less', () => {
 
 gulp.task('js', () => {
 	return gulp.src(['./app/client/src/scripts/app.js', './app/client/src/scripts/**/*.js'])
-						.pipe(embedTemplates())
+						.pipe(embedTemplates({
+							minimize: {empty: true}
+						}))
+						.pipe(replace(/\>[\s]+\</g, '><'))
 						.pipe(concat('app.js'))
 						.pipe(babel({
 							presets: ['es2015', 'es2016']
