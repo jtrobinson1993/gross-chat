@@ -10,7 +10,7 @@ app.component('topicOption', {
 		this.isSelected = this.option.selected;
 
 		this.onClick = () => {
-			if(!this.isSelected){
+			if(!this.isSelected && $user.isLoggedIn()){
 				$scope.$emit('topic:option-selected', this.option);
 			}
 		};

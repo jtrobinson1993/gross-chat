@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const Bookshelf = require('../utils/bookshelf');
+const shell = require('../shell');
 const tableName = 'users';
 
 require('./Vote');
@@ -10,7 +11,11 @@ const User = Bookshelf.model('User', {
 
   initialize(){
     this.on('creating', async (model, attrs, options) => {
-      this.set('password', await bcrypt.hash(this.get('password'), 10));
+      try {
+        this.set('password', await bcrypt.hash(this.get('password'), 10));
+      } catch (e) {
+        shell.trace(e);
+      }
     });
   },
 

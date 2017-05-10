@@ -1,12 +1,12 @@
 app.factory('$user', ['$cookies', '$http', function($cookies, $http){
 
 	function current(user){
-		if(user) $cookies.putObject('user', user);
+		if(user !== undefined) $cookies.putObject('user', user);
 		else return $cookies.getObject('user');
 	}
 
 	function token(token){
-		if(token) $cookies.putObject('token', token);
+		if(token !== undefined) $cookies.putObject('token', token);
 		else return $cookies.getObject('token');
 	}
 
@@ -22,14 +22,15 @@ app.factory('$user', ['$cookies', '$http', function($cookies, $http){
 		}
 	}
 
-	function isLoggedIn(){ return current(); }
+	function isLoggedIn(){ return current() !== undefined; }
 
 	function login({name, password}){
 		return $http.post('/user/authenticate', {name, password});
 	}
 
 	function logout(){
-		data({});
+		$cookies.putObject('user', undefined);
+		$cookies.putObject('token', undefined);
 	}
 
 	function register({name, password}){

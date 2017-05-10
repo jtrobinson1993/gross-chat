@@ -4,6 +4,7 @@ app.component('topicUi', {
 
 	controller: ['$scope', '$user', '$topic', function($scope, $user, $topic){
 		this.topics = [];
+		this.isLoggedIn = () => $user.isLoggedIn();
 
 		this.$onInit = () => {
 			$topic.list().success((data) => {

@@ -6,7 +6,8 @@
   <div class="popup overlay" ng:class="{'open': $ctrl.isPopupOpen}">
     <div class="popup-box">
       <div class="close-popup close-button fa fa-close" ng:click="$ctrl.closePopup()"></div>
-      <div class="popup-content" ng:show="!$ctrl.isLoggedIn()">
+      <div class="popup-content">
+        <user-logout ng:show="$ctrl.isLoggedIn()"></user-logout>
         <user-login ng:show="!$ctrl.isLoggedIn() && !$ctrl.isRegisterForm"></user-login>
         <user-register ng:show="!$ctrl.isLoggedIn() && $ctrl.isRegisterForm"></user-register>
         <div class="button unimportant" ng:show="!$ctrl.isLoggedIn()" ng:click="$ctrl.toggleRegister()">
