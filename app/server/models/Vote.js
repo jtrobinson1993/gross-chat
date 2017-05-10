@@ -1,48 +1,22 @@
-const mongoose = require('mongoose');
+const Bookshelf = require('../utils/bookshelf');
+const tableName = 'votes';
 
-const VoteSchema = mongoose.Schema({
-	title: {
-		type: String,
-		required: true
-	},
-	date: {
-		type: Number,
-		required: true
-	},
-	options: {
-		type: [{
-			title: {
-				type: String,
-				required: true
-			},
-			voters: [mongoose.Schema.Types.ObjectId]
-		}]
-	}
+require('./User');
+require('./Option');
+require('./Topic');
+const Vote = Bookshelf.model('Vote', {
+
+  tableName,
+
+  user(){ return this.belongsTo('User'); },
+  option(){ return this.belongsTo('Option'); },
+  topic(){ return this.belongsTo('Topic'); }
+
 });
 
-const Vote = mongoose.model('Vote', VoteSchema);
-
 module.exports = {
-	Schema: VoteSchema,
-	Model: Vote,
-	findById: (id, callback) => Vote.findById(id, callback),
-	all: (callback) => Vote.find({}, callback),
-	save: (vote, callback) => vote.save(callback),
-
-	select: async ({vote, user, option}) => {
-		await Vote.update({
-			$and: [
-				{_id: vote._id},
-				{'options.voters': {$elemMatch: {$eq: user.id}}}
-			]},
-			{$pull: {'options.$.voters': user.id}}
-		);
-		return Vote.update({
-			$and: [
-				{_id: vote._id},
-				{'options._id': mongoose.Types.ObjectId(option._id)}
-			]},
-			{$addToSet: {'options.$.voters': user.id}}
-		);
-	},
-};
+  Model: Vote,
+  Collection: Bookshelf.Collection.extend({model: Vote}),
+  get QueryBuilder(){ return Bookshelf.knex(tableName) },
+  get Query(){ return Bookshelf.knex.raw }
+}

@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+
+const shell = require('../shell');
+const response = require('../utils/response');
 const config = require('../utils/config');
 const passportStrategy = require('../utils/passport-strategy');
 
@@ -11,47 +14,53 @@ const Vote = require('../models/Vote');
 
 const router = express.Router();
 
+function token(user) {
+	return {
+		user,
+		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user.id), expiresIn: 172800})}`
+	};
+}
+
 router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-	res.json({success: true, msg: 'profile'});
+
+	res.json(response.success('Profile goes here'));
+
 });
 
 router.post('/authenticate', async (req, res, next) => {
-	const name = req.body.name;
-	const password = req.body.password;
 
-	const user = await User.findByName(name);
-	if(!user) return res.json({success: false, msg: 'User does not exist'});
+	let json;
 
-	const valid = await User.authenticate(user, password);
-	if(!valid) return res.json({success: false, msg: 'Invalid credentials'});
+	try {
+		const user = await new User.Model({name: req.body.name}).fetch();
 
-	res.json({
-		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user._id), expiresIn: 172800})}`,
-		user: {
-			id: user._id,
-			name: user.name
-		}
-	});
+		if(!user) json = response.failure('User does not exist');
+		else if(!(await user.authenticate(req.body.password))) json = response.failure('Invalid credentials');
+		else json = token(user);
+	} catch (e) {
+		shell.trace(e);
+		json = response.failure('Error while logging in');
+	}
+
+	res.json(json);
 
 });
 
 router.post('/register', async (req, res, next) => {
-	const newUser = new User.Model({
-		name: req.body.name,
-		password: req.body.password
-	});
 
-	let user = await User.findByName(newUser.name);
-	if(user) return res.json({success: false, msg: 'Username already exists'});
+	let json;
 
-	user = await User.save(newUser);
-	res.json({
-		token: `JWT ${jwt.sign(user, config.secret, {subject: String(user._id), expiresIn: 172800})}`,
-		user: {
-			id: user._id,
-			name: user.name
-		}
-	});
+	try {
+		const user = new User.Model({name: req.body.name});
+
+		if(await user.fetch()) json = response.failure('Username already exists');
+		else json = token(await user.save('password', req.body.password));
+	} catch (e) {
+		shell.trace(e);
+		json = response.failure('Error while registering');
+	}
+
+	res.json(json);
 
 });
 
