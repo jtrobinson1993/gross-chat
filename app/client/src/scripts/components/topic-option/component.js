@@ -6,16 +6,16 @@ app.component('topicOption', {
 		option: '<'
 	},
 
-	controller: ['$scope', '$user', function($scope, $user){
+	controller: ['$scope', '$user', '$topic', function($scope, $user, $topic){
 		this.isSelected = this.option.selected;
 
 		this.onClick = () => {
 			if(!this.isSelected && $user.isLoggedIn()){
-				$scope.$emit('topic:option-selected', this.option);
+				$scope.$emit($topic.events.voteCast, this.option);
 			}
 		};
 
-		$scope.$on('topic:select-options', (event, selectedOption) => {
+		$scope.$on($topic.events.updateOptions, (event, selectedOption) => {
 			const wasSelected = this.isSelected;
 			this.isSelected = this.option.title == selectedOption.title;
 			if(wasSelected && !this.isSelected){

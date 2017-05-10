@@ -23,13 +23,13 @@ app.component('topicUi', {
 			});
 		};
 
-		$scope.$on('topic:selected', (event, topic, option) => {
+		$scope.$on($topic.events.voted, (event, topic, option) => {
 			$topic.select({topic, option}).success((data) => {
 
 			});
 		});
 
-		$scope.$on('topic:topic-added', (event, topic) => {
+		$scope.$on($topic.events.added, (event, topic) => {
 			$topic.create(topic).success(data => this.topics.unshift(data));
 		});
 

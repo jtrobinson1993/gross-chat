@@ -11,7 +11,7 @@ app.component('userRegister', {
 			.register(this)
 			.success((data) => {
 				$user.data(data);
-				$scope.$emit('user:logged-in', data.user);
+				$scope.$emit($user.events.loggedIn, data.user);
 			})
 			.error((err) => {
 				console.log(err);

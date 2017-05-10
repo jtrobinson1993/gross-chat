@@ -1,5 +1,12 @@
 app.factory('$topic', ['$user', '$http', function($user, $http){
 
+  const events = {
+    added: 'topic:added',
+    voteCast: 'topic:vote-cast',
+    updateOptions: 'topic:update-options',
+    voted: 'topic:voted'
+  };
+
   function list(){
     return $http.get('/topic');
   }
@@ -12,6 +19,6 @@ app.factory('$topic', ['$user', '$http', function($user, $http){
     return $http.post(`/topic/${topic.id}/select`, {option, user: $user.current()});
   }
 
-  return {list, create, select};
+  return {list, create, select, events};
 
 }]);

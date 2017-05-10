@@ -7,9 +7,9 @@ app.component('userLogout', {
 
     this.logout = () => {
       $user.logout();
-      $scope.$emit('user:logged-out');
+      $scope.$emit($user.events.loggedOut);
     }
-    
+
   }]
 
 });

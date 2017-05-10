@@ -6,10 +6,10 @@ app.component('topicItem', {
 		topic: '<'
 	},
 
-	controller: ['$scope', function($scope){
-		$scope.$on('topic:option-selected', (event, selectedOption) => {
-			$scope.$broadcast('topic:select-options', selectedOption);
-			$scope.$emit('topic:selected', this.topic, selectedOption);
+	controller: ['$scope', '$topic', function($scope, $topic){
+		$scope.$on($topic.events.voteCast, (event, selectedOption) => {
+			$scope.$broadcast($topic.events.updateOptions, selectedOption);
+			$scope.$emit($topic.events.voted, this.topic, selectedOption);
 		});
 	}]
 

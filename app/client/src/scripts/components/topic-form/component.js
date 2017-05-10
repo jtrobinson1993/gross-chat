@@ -2,7 +2,7 @@ app.component('topicForm', {
 
 	templateUrl: 'template.html',
 
-	controller: ['$http', '$scope', function($http, $scope){
+	controller: ['$http', '$scope', '$topic', function($http, $scope, $topic){
 		this.options = [];
 		this.title = '';
 		this.option = '';
@@ -19,7 +19,7 @@ app.component('topicForm', {
 		};
 
 		this.addVote = () => {
-			$scope.$emit('topic:topic-added', {
+			$scope.$emit($topic.events.added, {
 				title: this.title,
 				options: this.options.slice()
 			});

@@ -12,12 +12,12 @@ app.component('userUi', {
 		this.openPopup = () => this.isPopupOpen = true;
 		this.closePopup = () => this.isPopupOpen = false;
 
-		$scope.$on('user:logged-in', (event, user) => {
+		$scope.$on($user.events.loggedIn, (event, user) => {
 			this.currentUser = user;
 			this.closePopup();
 		});
 
-		$scope.$on('user:logged-out', (event) => {
+		$scope.$on($user.events.loggedOut, (event) => {
 			this.currentUser = {};
 			this.closePopup();
 		});
