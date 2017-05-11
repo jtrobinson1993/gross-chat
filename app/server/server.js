@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const socket = require('socket.io');
 
 global.Promise = require('bluebird');
 
@@ -26,8 +27,14 @@ const app = express()
 ))
 .use('/user', userRoute);
 
-if(!config.ssl) app.listen(config.port, shell.start);
-else {
+const server;
+
+if(!config.ssl) {
+
+	const http = require('http');
+	server = http.createServer(app);
+
+} else {
 
 	const https = require('https');
 	const fs = require('fs');
@@ -37,6 +44,12 @@ else {
 		cert: fs.readFileSync(config.ssl_cert)
 	};
 
+	server = https.createServer(options, app);
+
 	https.createServer(options, app).listen(config.port, shell.start);
 
 }
+
+const io = socket(server);
+
+server.listen(config.port, shell.start);
