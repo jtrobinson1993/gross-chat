@@ -10,7 +10,6 @@ const config = require('../utils/config');
 const passportStrategy = require('../utils/passport-strategy');
 
 const User = require('../models/User');
-const Vote = require('../models/Vote');
 
 const router = express.Router();
 

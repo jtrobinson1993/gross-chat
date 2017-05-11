@@ -3,8 +3,6 @@ const Bookshelf = require('../utils/bookshelf');
 const shell = require('../shell');
 const tableName = 'users';
 
-require('./Vote');
-require('./Option');
 const User = Bookshelf.model('User', {
 
   tableName,
@@ -18,8 +16,6 @@ const User = Bookshelf.model('User', {
       }
     });
   },
-
-  votes(){ return this.hasMany('Option').through('Vote'); },
 
   authenticate(password){
     return bcrypt.compare(password, this.get('password'));

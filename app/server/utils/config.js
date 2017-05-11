@@ -17,7 +17,4 @@ const defaults = {
 for(let key in config) defaults[key] = config[key];
 for(let key in args) defaults[key] = args[key];
 
-defaults.trace = (...strs) => defaults.debug && strs && strs.forEach(console.log);
-defaults.failure = (msg) => { return {success: false, msg}};
-
 module.exports = defaults;

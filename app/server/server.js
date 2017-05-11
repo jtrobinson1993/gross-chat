@@ -11,7 +11,6 @@ const config = require('./utils/config');
 const passportStrategy = require('./utils/passport-strategy');
 
 const userRoute = require('./routes/user');
-const voteRoute = require('./routes/topic');
 
 passport.use(passportStrategy);
 
@@ -25,8 +24,7 @@ const app = express()
 .use('/', express.static(
 	path.join(__dirname, '../client/build')
 ))
-.use('/user', userRoute)
-.use('/topic', voteRoute);
+.use('/user', userRoute);
 
 if(!config.ssl) app.listen(config.port, shell.start);
 else {
