@@ -10,9 +10,12 @@ const replace = require('gulp-replace');
 const embedTemplates = require('gulp-angular-embed-templates');
 
 gulp.task('default', ['less', 'js', 'html']);
-gulp.watch('./app/client/src/**/*.js', ['js']);
-gulp.watch('./app/client/src/**/*.less', ['less']);
-gulp.watch('./app/client/**/*.html', ['html']);
+
+gulp.task('watch', () => {
+	gulp.watch('./app/client/src/**/*.js', ['js']);
+	gulp.watch('./app/client/src/**/*.less', ['less']);
+	gulp.watch('./app/client/**/*.html', ['html']);
+});
 
 gulp.task('less', () => {
 	return gulp.src('./app/client/src/styles/styles.less')
