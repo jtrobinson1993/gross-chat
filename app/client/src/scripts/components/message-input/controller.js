@@ -5,10 +5,13 @@ app.component('messageInput', {
   controller: ['$scope', function($scope){
     this.message = {content:''};
 
+    this.clear = () => this.message.content = '';
+
     this.submit = () => {
       if(!this.message.content.trim()) return;
 
       $scope.$emit('message', angular.copy(this.message));
+      this.clear();
     };
 
   }]

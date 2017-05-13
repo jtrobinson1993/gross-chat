@@ -1,4 +1,4 @@
 <div class="message-input">
-  <input class="message-input-field" type="text" ng:model="$ctrl.message.content"/>
+  <input class="message-input-field" type="text" ng:model="$ctrl.message.content" ng:enter-press="$ctrl.submit()"/>
   <button class="message-input-submit" ng:click="$ctrl.submit()">Send</button>
 </div>
