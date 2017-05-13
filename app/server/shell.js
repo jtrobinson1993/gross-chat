@@ -72,11 +72,15 @@ function execute(line){
     if(command.is(cmd)) return command.execute(args);
 }
 
-function start(){
+function printHeader(withIntro = true){
   const message = `| ${config.ssl ? 'HTTPS' : 'HTTP'} server running on port ${config.port} |`;
   const border = `+${'-'.repeat(message.length-2)}+`;
-  const intro = 'm\'shell v0.1 (type "help")';
+  const intro = withIntro ? 'm\'shell v0.1 (type "help")' : '';
   console.log(`${border}\n${message}\n${border}\n${' '.repeat(message.length/3-8) + intro}\n`.cyan);
+}
+
+function start(){
+  printHeader();
   shell.setPrompt(prompt1);
   shell.prompt();
   shell.on('line', (line) => {
@@ -177,4 +181,11 @@ Command.Query = new Command({
   }
 });
 
-module.exports = {authenticate, start, trace};
+module.exports = !config['no-shell'] ?
+{authenticate, start, trace}
+:
+{
+  trace,
+  start(){ printHeader(false) },
+  authenticate(){}
+}

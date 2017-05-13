@@ -5,13 +5,13 @@ const passport = require('passport');
 
 global.Promise = require('bluebird');
 
-const shell = require('./shell');
-
 const config = require('./utils/config');
 const passportStrategy = require('./utils/passport-strategy');
 
 const userRoute = require('./routes/user');
 const messageSocket = require('./sockets/message');
+
+const shell = require('./shell');
 
 passport.use(passportStrategy);
 
