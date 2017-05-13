@@ -1,5 +1,5 @@
-const config = require('../../../config.json');
 const args = require('./command-line-args');
+const config = args['no-config'] ? {} : require('../../../config.json');
 
 const defaults = {
   "debug": true,
