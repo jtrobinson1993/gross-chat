@@ -14,7 +14,7 @@ gulp.task('default', ['less', 'js', 'html']);
 gulp.task('watch', () => {
 	gulp.watch('./app/client/src/**/*.js', ['js']);
 	gulp.watch('./app/client/src/**/*.less', ['less']);
-	gulp.watch('./app/client/**/*.html', ['html']);
+	gulp.watch('./app/client/**/*.html', ['html', 'js']);
 });
 
 gulp.task('less', () => {
