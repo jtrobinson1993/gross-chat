@@ -9,3 +9,31 @@ CREATE TABLE users (
   name VARCHAR(256) NOT NULL,
   password VARCHAR(256) NOT NULL
 );
+
+DROP TABLE IF EXISTS channels;
+CREATE TABLE channels (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(256) NOT NULL
+);
+
+DROP TABLE IF EXISTS memberships;
+CREATE TABLE memberships (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  channel_id INT NOT NULL,
+  FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (channel_id)
+    REFERENCES channels(id)
+    ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  content VARCHAR(1024) NOT NULL,
+  membership_id INT NOT NULL,
+  FOREIGN KEY (membership_id)
+    REFERENCES memberships(id)
+);

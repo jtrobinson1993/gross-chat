@@ -21,8 +21,8 @@ const User = Bookshelf.model('User', {
     return bcrypt.compare(password, this.get('password'));
   }
 
-  messages(){ return this.hasMany('Message'); }
-  channels(){ return this.belongsToMany('Channel'); }
+  messages(){ return this.hasMany('Message').through('Membership'); }
+  channels(){ return this.belongsToMany('Channel').through('Membership'); }
 
 });
 

@@ -1,4 +1,3 @@
-const bcrypt = require('bcryptjs');
 const Bookshelf = require('../utils/bookshelf');
 const shell = require('../shell');
 const tableName = 'messages';
@@ -9,8 +8,8 @@ const Message = Bookshelf.model('Message', {
 
   tableName,
 
-  channel(){ return this.belongsTo('Channel'); }
-  user(){ return this.belongsTo('User'); }
+  channel(){ return this.belongsTo('Channel').through('Membership'); }
+  user(){ return this.belongsTo('User').through('Membership'); }
 
 });
 
