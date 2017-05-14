@@ -1,10 +1,10 @@
-app.factory('$socket', ['$rootScope', function ($rootScope) {
+app.factory('socket', ['$rootScope', function ($rootScope) {
 
   const socket = io.connect();
 
   return {
 
-    $on(eventName, callback) {
+    on(eventName, callback) {
       socket.on(eventName, function () {
         var args = arguments;
         $rootScope.$apply(function () {
@@ -13,7 +13,7 @@ app.factory('$socket', ['$rootScope', function ($rootScope) {
       });
     },
 
-    $emit(eventName, data, callback) {
+    emit(eventName, data, callback) {
       socket.emit(eventName, data, function () {
         var args = arguments;
         $rootScope.$apply(function () {

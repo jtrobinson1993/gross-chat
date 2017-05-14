@@ -1,6 +1,7 @@
 <div class="message">
-  <div class="message-user">
+  <div class="message-info">
     <div class="message-user-name">{{$ctrl.message.user.name}}</div>
+    <div class="message-timestamp">{{$ctrl.message.timestamp | date:'short'}}</div>
   </div>
   <div class="message-content">{{$ctrl.message.content}}</div>
 </div>

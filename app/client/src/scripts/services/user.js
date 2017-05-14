@@ -1,9 +1,4 @@
-app.factory('$user', ['$cookies', '$http', function($cookies, $http){
-
-	const events = {
-		loggedIn: 'user:logged-in',
-		loggedOut: 'user:logged-out'
-	};
+app.factory('user', ['$cookies', '$http', function($cookies, $http){
 
 	function current(user){
 		if(user !== undefined) $cookies.putObject('user', user);
@@ -42,6 +37,6 @@ app.factory('$user', ['$cookies', '$http', function($cookies, $http){
 		return $http.post('/user/register', {name, password});
 	}
 
-	return {current, token, data, login, logout, isLoggedIn, register, events};
+	return {current, token, data, login, logout, isLoggedIn, register};
 
 }]);
