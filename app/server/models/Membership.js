@@ -8,8 +8,8 @@ const Membership = Bookshelf.model('Membership', {
 
   tableName,
 
-  user(){ return this.belongsTo('User'); }
-  channel(){ return this.belongsTo('Channel'); }
+  user(){ return this.belongsTo('User'); },
+  channel(){ return this.belongsTo('Channel'); },
   messages(){ return this.hasMany('Message'); }
 
 });

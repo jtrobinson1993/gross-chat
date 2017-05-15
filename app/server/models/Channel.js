@@ -8,7 +8,7 @@ const Channel = Bookshelf.model('Channel', {
 
   tableName,
 
-  users(){ return this.belongsToMany('User').through('Membership'); }
+  users(){ return this.belongsToMany('User').through('Membership'); },
   messages(){ return this.hasMany('Message'); }
 
 });

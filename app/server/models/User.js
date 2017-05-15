@@ -19,9 +19,9 @@ const User = Bookshelf.model('User', {
 
   authenticate(password){
     return bcrypt.compare(password, this.get('password'));
-  }
+  },
 
-  messages(){ return this.hasMany('Message').through('Membership'); }
+  messages(){ return this.hasMany('Message').through('Membership'); },
   channels(){ return this.belongsToMany('Channel').through('Membership'); }
 
 });

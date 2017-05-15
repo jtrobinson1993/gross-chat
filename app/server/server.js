@@ -40,6 +40,8 @@ if(!config.ssl) {
 	server = https.createServer({key, cert}, app).listen(config.port, shell.start);
 }
 
-messageSocket(server);
+const io = require('socket.io')(server);
+
+messageSocket(io);
 
 server.listen(config.port, shell.start);
