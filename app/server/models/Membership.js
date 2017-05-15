@@ -10,6 +10,13 @@ const Membership = Bookshelf.model('Membership', {
 
   user(){ return this.belongsTo('User'); }
   channel(){ return this.belongsTo('Channel'); }
-
+  messages(){ return this.hasMany('Message'); }
 
 });
+
+module.exports = {
+  Model: Membership,
+  Collection: Bookshelf.Collection.extend({model: Membership}),
+  get QueryBuilder(){ return Bookshelf.knex(tableName) },
+  get Query(){ return Bookshelf.knex.raw }
+}

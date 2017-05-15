@@ -10,6 +10,7 @@ const Message = Bookshelf.model('Message', {
 
   channel(){ return this.belongsTo('Channel').through('Membership'); }
   user(){ return this.belongsTo('User').through('Membership'); }
+  membership(){ return this.belongsTo('Membership'); }
 
 });
 
