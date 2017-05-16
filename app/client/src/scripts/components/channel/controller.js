@@ -7,8 +7,20 @@ app.component('channel', {
     this.user = user.current();
     this.name = 'general';
 
+    const push = message => {
+      const lastMessage = this.messages[this.messages.length - 1];
+
+      if(lastMessage.user.name === message.user.name &&
+         message.timestamp - lastMessage.timestamp < 60000){
+
+        lastMessage.content += `\n${message.content}`;
+      } else {
+        this.messages.push(message);
+      }
+    }
+
     socket.on('message', message => {
-      this.messages.push(message);
+      push(message);
     });
 
     $scope.$on('message', (event, message) => {
@@ -16,7 +28,7 @@ app.component('channel', {
       message.user = this.user ? this.user.name : 'anonymous';
       message.channel = this.name || 'general';
 
-      this.messages.push(message);
+      push(message);
       socket.emit('message', message);
     });
 
