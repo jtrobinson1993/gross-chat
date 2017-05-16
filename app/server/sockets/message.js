@@ -1,11 +1,12 @@
-function connection(socket){
+const shell = require('../shell');
+const Socket = require('./Socket');
+const Message = require('../documents/Message');
 
-  socket.on('message', message => {
-    socket.broadcast.emit('message', message);
+module.exports = Socket.extend(function(io){
+
+  this.on('message', message => {
+    this.broadcast.emit('message', message);
+    new Message.Model(message).save().catch(shell.trace);
   });
 
-}
-
-module.exports = io => {
-  io.on('connection', connection.bind(io));
-};
+});

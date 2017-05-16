@@ -3,10 +3,10 @@ const config = require('./config');
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    host: config.database_host,
-    user: config.database_user,
-    password: config.database_password,
-    database: config.database_name
+    host: config.sql_database_host,
+    user: config.sql_database_user,
+    password: config.sql_database_password,
+    database: config.sql_database_name
   }
 });
 

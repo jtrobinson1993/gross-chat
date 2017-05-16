@@ -9,6 +9,8 @@ const config = require('./utils/config');
 const passportStrategy = require('./utils/passport-strategy');
 
 const userRoute = require('./routes/user');
+const channelRoute = require('./routes/channel');
+
 const messageSocket = require('./sockets/message');
 
 const shell = require('./shell');
@@ -25,7 +27,8 @@ const app = express()
 .use('/', express.static(
 	path.join(__dirname, '../client/build')
 ))
-.use('/user', userRoute);
+.use('/user', userRoute)
+.use('/channel', channelRoute);
 
 let server;
 

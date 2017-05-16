@@ -8,10 +8,14 @@ const defaults = {
   "ssl": false,
   "ssl_key": "",
   "ssl_cert": "",
-  "database_host": "localhost",
-  "database_user": "root",
-  "database_password": "",
-  "database_name": ""
+  "sql_database_host": "localhost",
+  "sql_database_user": "root",
+  "sql_database_password": "",
+  "sql_database_name": "",
+  "nosql_database_host": "localhost",
+  "nosql_database_user": "root",
+  "nosql_database_password": "",
+  "nosql_database_name": ""
 };
 
 for(let key in config) defaults[key] = config[key];
