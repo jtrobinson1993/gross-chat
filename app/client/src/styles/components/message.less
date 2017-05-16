@@ -1,14 +1,48 @@
-.message {
+.message-container {
+  text-align: left;
+  margin-bottom: 4px;
 
-  padding: 12px;
-  background-color: @color-grey-light;
-  border-radius: 2px;
-  border-bottom: 1px solid @color-grey;
-  box-shadow: @shadow-small;
-  margin-bottom: 10px;
+  .message {
+    display: inline-block;
+    max-width: 60%;
+    padding: 12px;
+    background-color: @color-grey-light;
+    border-radius: 2px;
+    border-bottom: 1px solid @color-grey;
+    box-shadow: @shadow-small;
 
-  .message-info {
-    font-size: 0.8em;
+    .message-info {
+      font-size: 0.8em;
+    }
+
+    .message-content {
+      text-align: left;
+    }
+
+  }
+
+  .message-timestamp {
+    color: @color-grey;
+    font-size: 0.7em;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+
+  &.me {
+    text-align: right;
+
+    .message {
+      background-color: @color-blue-white;
+      border-bottom-color: @color-blue-white - @color-shade * 1.5;
+    }
+  }
+
+  &:hover {
+    .message-timestamp {
+      visibility: visible;
+      opacity: 1;
+    }
   }
 
 }

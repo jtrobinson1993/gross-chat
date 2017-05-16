@@ -1,7 +1,9 @@
-<div class="message" ng:class="{me: $ctrl.user.name == $ctrl.message.user.name}">
-  <div class="message-info">
-    <div class="message-user-name">{{$ctrl.message.user.name}}</div>
-    <div class="message-timestamp">{{$ctrl.message.timestamp | date:'short'}}</div>
+<div class="message-container" ng:class="{me: $ctrl.user.name == $ctrl.message.user.name}">
+  <div class="message">
+    <div class="message-info">
+      <div class="message-user-name">{{$ctrl.message.user.name}}</div>
+    </div>
+    <div class="message-content">{{$ctrl.message.content}}</div>
   </div>
-  <div class="message-content">{{$ctrl.message.content}}</div>
+  <div class="message-timestamp">{{$ctrl.message.timestamp | date:'M/d h:mm a'}}</div>
 </div>

@@ -1,25 +1,47 @@
 .message-input {
+  @padding: 20px;
+
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
+  padding: @padding;
+  border-top: 1px solid @color-grey-light;
 
   .message-input-field {
     width: 100%;
     padding: 10px 100px 10px 10px;
     font-size: 1.2em;
     font-family: @font-main;
+    border: 1px solid @color-grey-light;
+    border-radius: 2px;
   }
 
   .message-input-submit {
     position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    right: @padding;
+    top: @padding;
+    bottom: @padding;
+    padding: @padding/2 @padding;
 
     font-size: 1em;
     font-family: @font-main;
     text-transform: uppercase;
+    color: @color-white;
+
+    background-color: @color-blue-light;
+    border: none;
+    border-bottom: 2px solid @color-blue;
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+
+    transition: background-color 200ms, border-color 200ms;
+    cursor: pointer;
+
+    &:hover {
+      background-color: @color-blue-very-light;
+      border-bottom-color: @color-blue-light;
+    }
   }
 
 }
