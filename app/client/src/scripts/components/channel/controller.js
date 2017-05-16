@@ -9,15 +9,20 @@ app.component('channel', {
 
     const push = message => {
       const lastMessage = this.messages[this.messages.length - 1];
+      message.timestamp = new Date(message.timestamp);
 
-      if(lastMessage.user.name === message.user.name &&
-         message.timestamp - lastMessage.timestamp < 60000){
+      if(lastMessage){
+        lastMessage.timestamp = new Date(lastMessage.timestamp);
 
-        lastMessage.content += `\n${message.content}`;
-      } else {
-        this.messages.push(message);
+        if(lastMessage && lastMessage.user === message.user &&
+          message.timestamp - lastMessage.timestamp < 60000){
+          lastMessage.contents.push(message.contents[0]);
+          return;
+        }
       }
-    }
+
+      this.messages.push(message);
+    };
 
     socket.on('message', message => {
       push(message);
@@ -35,7 +40,7 @@ app.component('channel', {
     this.$onInit = function(){
       $http
       .get(`/channel/${this.name}`)
-      .then(({data}) => this.messages = this.messages.concat(data));
+      .then(({data}) => data.forEach(push));
     };
 
   }]

@@ -13,8 +13,8 @@ const MessageSchema = new Mongoose.Schema({
     type: Date,
     required: true
   },
-  content: {
-    type: String,
+  contents: {
+    type: Array,
     required: true
   }
 });

@@ -3,12 +3,12 @@ app.component('messageInput', {
   templateUrl: 'template.html',
 
   controller: ['$scope', function($scope){
-    this.message = {content:''};
+    this.message = {contents: ['']};
 
-    this.clear = () => this.message.content = '';
+    this.clear = () => this.message.contents = [''];
 
     this.submit = () => {
-      if(!this.message.content.trim()) return;
+      if(!this.message.contents[0].trim()) return;
 
       $scope.$emit('message', angular.copy(this.message));
       this.clear();
