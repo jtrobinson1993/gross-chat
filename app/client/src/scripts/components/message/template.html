@@ -1,4 +1,4 @@
-<div class="message">
+<div class="message" ng:class="{me: $ctrl.user.name == $ctrl.message.user.name}">
   <div class="message-info">
     <div class="message-user-name">{{$ctrl.message.user.name}}</div>
     <div class="message-timestamp">{{$ctrl.message.timestamp | date:'short'}}</div>

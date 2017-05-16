@@ -4,8 +4,8 @@ app.component('channel', {
 
   controller: ['$scope', '$http', 'socket', 'user', function($scope, $http, socket, user){
     this.messages = [];
-    this.currentUser = user.current();
-    this.channelName = 'general';
+    this.user = user.current();
+    this.name = 'general';
 
     socket.on('message', message => {
       this.messages.push(message);
@@ -13,8 +13,8 @@ app.component('channel', {
 
     $scope.$on('message', (event, message) => {
       message.timestamp = Date.now();
-      message.user = this.currentUser || 'anonymous';
-      message.channel = this.channelName || 'general';
+      message.user = this.user ? this.user.name : 'anonymous';
+      message.channel = this.name || 'general';
 
       this.messages.push(message);
       socket.emit('message', message);
@@ -22,7 +22,7 @@ app.component('channel', {
 
     this.$onInit = function(){
       $http
-      .get(`/channel/${this.channelName}`)
+      .get(`/channel/${this.name}`)
       .then(({data}) => this.messages = this.messages.concat(data));
     };
 

@@ -4,6 +4,10 @@ app.component('message', {
 
   bindings: {
     message: '<'
-  }
+  },
+
+  controller: ['user', function(user){
+    this.user = user.current();
+  }]
 
 });
