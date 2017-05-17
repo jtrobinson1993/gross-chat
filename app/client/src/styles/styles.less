@@ -6,6 +6,7 @@
 @import "components/channel";
 @import "components/message";
 @import "components/message-input";
+@import "components/channel-listing";
 
 * {
 	box-sizing: border-box;
@@ -16,20 +17,38 @@
 	}
 }
 
+
 html {
 	font-family: @font-main;
 	color: @color-grey-very-dark;
 	background-color: @color-grey-very-light;
+	height: 100%;
 }
 
 body {
+	display: table;
+	height: 100%;
+	width: 100%;
 	margin: 0;
 }
 
+.main-content {
+	height: 100%;
+	width: 100%;
+	display: flex;
+}
+
 .content {
-	max-width: 1080px;
-	margin: 0 auto;
-	padding: 20px;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	flex:1;
+	.channel {
+		width: 100%;
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 20px;
+	}
 }
 
 .button {

@@ -1,0 +1,62 @@
+// main: ../styles.less
+
+@listing-width: 220px;
+
+label.mimify {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  font-size: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: @color-grey-very-dark;
+  cursor: pointer;
+  transition: left @transition-speed ease;
+  &:before {
+    content: '\f068';
+    font-size: 1.5rem;
+    font-family: FontAwesome;
+    color: #F0F0F0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+input.mimify {
+  display:none;
+  &:checked {
+    + label.mimify {
+      left: @listing-width + 10px;
+      &:before {
+        content: '\f067';
+      }
+    }
+    ~ .main-content {
+      .channel-listing {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+.channel-listing {
+  position:relative;
+  margin-left: -@listing-width;
+	width: @listing-width;
+	height: 100%;
+	background: @color-grey-very-light;
+	border-right: 1px solid @color-grey-light;
+
+  transition: margin @transition-speed ease;
+	.channel {
+		&.online {
+		}
+	}
+  .user-info {
+
+  }
+}
